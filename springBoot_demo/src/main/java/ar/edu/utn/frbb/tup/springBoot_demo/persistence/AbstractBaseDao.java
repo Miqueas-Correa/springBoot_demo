@@ -1,4 +1,4 @@
-package ar.edu.utn.frbb.tup.springBoot_demo.parsistence;
+package ar.edu.utn.frbb.tup.springBoot_demo.persistence;
 
 import java.util.HashMap;
 import java.util.Map;

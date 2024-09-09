@@ -1,19 +1,18 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.model;
 import java.time.LocalDate;
+import java.time.Period;
 
 public class Persona {
     // Atributos
     private String nombre_y_apellido;
-    private String direccion;
-    private Long telefono;
+    private long telefono;
     private String email;
     private LocalDate fecha_de_nacimiento;
-    private Long dni;
+    private long dni;
 
     // constructor
-    public Persona(String nombre_y_apellido, String direccion, Long telefono, String email, LocalDate fecha_de_nacimiento, Long dni){
+    public Persona(String nombre_y_apellido, long telefono, String email, LocalDate fecha_de_nacimiento, Long dni){
         this.nombre_y_apellido = nombre_y_apellido;
-        this.direccion = direccion;
         this.telefono = telefono;
         this.email = email;
         this.fecha_de_nacimiento = fecha_de_nacimiento;
@@ -27,12 +26,6 @@ public class Persona {
     }
     public void setNombre_y_apellido(String nombre_y_apellido){
         this.nombre_y_apellido = nombre_y_apellido;
-    }
-    public String getDireccion(){
-        return this.direccion;
-    }
-    public void setDireccion(String direccion){
-        this.direccion = direccion;
     }
     public Long getTelefono(){
         return this.telefono;
@@ -64,11 +57,17 @@ public class Persona {
         System.out.println("------------------------");
         System.out.println("DATOS DEL CLIENTE");
         System.out.println("Nombre y apellido: " + this.nombre_y_apellido);
-        System.out.println("Direccion: " + this.direccion);
         System.out.println("Telefono: " + this.telefono);
         System.out.println("Email: " + this.email);
         System.out.println("Fecha de nacimiento: " + this.fecha_de_nacimiento);
         System.out.println("DNI: "+ this.dni);
         System.out.println("---------------------------");
+    }
+
+    // metodo para calcular la edad
+    public int getEdad() {
+        LocalDate fechaActual = LocalDate.now();
+        Period periodo = Period.between(this.fecha_de_nacimiento, fechaActual);
+        return periodo.getYears();
     }
 }

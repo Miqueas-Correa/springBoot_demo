@@ -2,58 +2,24 @@ package ar.edu.utn.frbb.tup.springBoot_demo.model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+
+import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.InactiveAccountException;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.InsufficientFundsException;
 
 public class Cuenta {
     private boolean estaA;
-    private Long id_del_titular;
+    private Long titular;
     private double saldo;
-    private String alias;
-    private Long cbu_cvu;
-    private String tipo_de_cuenta;
+    private Long numeroCuenta;
+    private String tipoCuenta;
     private String moneda;
     private List<String> movimientos = new ArrayList<>();
-    private LocalDateTime fecha_de_apertura;
+    private LocalDateTime fechaCreacion;
 
-    // buscar cuenta por el alias o por el cvu/cbu
-    private Cuenta buscarCuenta_alias(String alias, Banco banco){
-        for(Cliente cliente : banco.getClientes()){
-            for (Cuenta cuenta2 : cliente.getCuentas()) {
-                if (cuenta2.getEstaA() && cuenta2.getAlias().equals(alias)) {
-                    return cuenta2;
-                }
-            }
-        }
-        return null; // null si no se encontro o no esta activa la cuenta
-    }
-    private Cuenta buscarCuenta_cvu_cbu(Long cvu, Banco banco){
-        List<Cliente> listClientes = banco.getClientes();
-        for(Cliente cliente : listClientes){
-            Set<Cuenta> cuenta = cliente.getCuentas();
-            for (Cuenta cuenta2 : cuenta) {
-                if (cuenta2.estaA == true) {
-                    if (cuenta2.cbu_cvu.equals(cvu)) {
-                        return cuenta2;
-                    }
-                }
-            }
-        }
-        return null; // null si no se encontro o no esta activa la cuenta
-    }
-
-    // verificar si el alia existe en una de las cuentas del banco
-    public boolean buscarAlias(String alias){
-        Banco banco = new Banco();
-        List<Cliente> listClientes = banco.getClientes();
-        for(Cliente cliente : listClientes){
-            Set<Cuenta> cuenta = cliente.getCuentas();
-            for (Cuenta cuenta2 : cuenta) {
-                if (cuenta2.alias.equals(alias)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    // metodo toString
+    @Override
+    public String toString(){
+        return this.titular.toString() + ";" + this.estaA + ";" + this.saldo + ";" + this.numeroCuenta.toString() + ";" + this.tipoCuenta + ";" + this.moneda.toString() + ";" + this.movimientos.toString() + ";" + this.fechaCreacion.toString();
     }
 
     // Getters y Setters
@@ -73,12 +39,12 @@ public class Cuenta {
         this.setMovimiento("Estado de la cuenta paso de: " + this.estaA + " a: " + estaA);
         this.estaA = estaA;
     }
-    public Long getId_del_titular() {
-        return this.id_del_titular;
+    public Long getTitular() {
+        return this.titular;
     }
-    public void setId_del_titular(Long id){
-        this.setMovimiento("Se cambio el id de la cuenta de: " + this.id_del_titular + " a: " + id);
-        this.id_del_titular = id;
+    public void setTitular(Long id){
+        this.setMovimiento("Se cambio el id de la cuenta de: " + this.titular + " a: " + id);
+        this.titular = id;
     }
     public double getSaldo() {
         return this.saldo;
@@ -87,26 +53,19 @@ public class Cuenta {
         this.setMovimiento("Se cambio el saldo de la cuenta de: " + this.saldo + " a: " + saldo);
         this.saldo = saldo;
     }
-    public String getAlias() {
-        return this.alias;
+    public Long getNumeroCuenta() {
+        return this.numeroCuenta;
     }
-    public void setAlias(String alias) {
-        this.setMovimiento("Se cambio el alias de la cuenta de: " + this.alias + " a: " + alias);
-        this.alias = alias;
+    public void setNumeroCuenta(Long cbu_cvu) {
+        this.setMovimiento("Se establecio el numero de la cuenta a: " + cbu_cvu);
+        this.numeroCuenta = cbu_cvu;
     }
-    public Long getCbu_cvu() {
-        return this.cbu_cvu;
+    public String getTipoCuenta() {
+        return this.tipoCuenta;
     }
-    public void setCbu_cvu(Long cbu_cvu) {
-        this.setMovimiento("Se cambio el cbu_cvu de la cuenta de: " + this.cbu_cvu + " a: " + cbu_cvu);
-        this.cbu_cvu = cbu_cvu;
-    }
-    public String getTipo_de_cuenta() {
-        return this.tipo_de_cuenta;
-    }
-    public void setTipo_de_cuenta(String tipo_de_cuenta) {
-        this.setMovimiento("Se cambio el tipo de cuenta de la cuenta de: " + this.tipo_de_cuenta + " a: " + tipo_de_cuenta);
-        this.tipo_de_cuenta = tipo_de_cuenta;
+    public void setTipoCuenta(String tipo_de_cuenta) {
+        this.setMovimiento("Se cambio el tipo de cuenta de la cuenta de: " + this.tipoCuenta + " a: " + tipo_de_cuenta);
+        this.tipoCuenta = tipo_de_cuenta;
     }
     public String getMoneda() {
         return this.moneda;
@@ -115,12 +74,12 @@ public class Cuenta {
         this.setMovimiento("Se cambio la moneda de la cuenta de: " + this.moneda + " a: " + moneda);
         this.moneda = moneda;
     }
-    public String getFecha_de_apertura() {
-        return this.fecha_de_apertura.toString();
+    public LocalDateTime getFechaCreacion() {
+        return this.fechaCreacion;
     }
-    public void setFecha_de_apertura(LocalDateTime fecha_de_apertura) {
+    public void setFechaCreacion(LocalDateTime fecha_de_apertura) {
         this.setMovimiento("Se asigno la fecha de apertura de la cuenta a: " + fecha_de_apertura.toString());
-        this.fecha_de_apertura = fecha_de_apertura;
+        this.fechaCreacion = fecha_de_apertura;
     }
 
 
@@ -128,14 +87,13 @@ public class Cuenta {
     public void getDatosCuenta(){
         System.out.println("------------------------");
         System.out.println("DATOS DEL CUENTA");
-        System.out.println("Id del titular: "+ this.id_del_titular);
+        System.out.println("Id del titular: "+ this.titular);
         System.out.println("Esta activa: " + this.estaA);
         System.out.println("Saldo: " + this.saldo);
-        System.out.println("Alias: " + this.alias);
-        System.out.println("CBU/CVU: " + this.cbu_cvu);
-        System.out.println("Tipo de cuenta: " + this.tipo_de_cuenta);
+        System.out.println("CBU/CVU: " + this.numeroCuenta);
+        System.out.println("Tipo de cuenta: " + this.tipoCuenta);
         System.out.println("Moneda: " + this.moneda);
-        System.out.println("Fecha de apertura: " + this.fecha_de_apertura);
+        System.out.println("Fecha de apertura: " + this.fechaCreacion);
         System.out.println("---------------------------");
     }
     public void deposito(double efectivo){
@@ -165,26 +123,13 @@ public class Cuenta {
         }
     }
     // metodo para hacer una transferencia
-    public void transferir(double efectivo, String alias, Long cvu, Banco banco) {
-        Cuenta cuentaA = buscarCuenta_alias(alias, banco);
-        Cuenta cuentaC = buscarCuenta_cvu_cbu(cvu, banco);
+    public void transferir(double monto, Long cuentaDestino) throws InactiveAccountException, InsufficientFundsException {
         // Verifica que la cuenta actual esté activa y que no se transfiera a sí misma
-        if (this.estaA && (!this.alias.equals(alias) || !this.cbu_cvu.equals(cvu))) {
-            if (cuentaA != null || cuentaC != null) {
-                Cuenta cuentaDestino = (cuentaA != null) ? cuentaA : cuentaC;
-                if(this.saldo >= efectivo){
-                    this.descontarDinero(efectivo);
-                    cuentaDestino.recibirTransferencia(efectivo, this.getAlias(), this.getMoneda());
-                    this.setMovimiento("Transferencia de " + efectivo + " " + cuentaDestino.moneda + " a " + cuentaDestino.getAlias());
-                } else {
-                    System.out.println("No hay saldo suficiente");
-                }
-            } else {
-                System.out.println("No se encontró la cuenta o no está activa");
-            }
-        } else {
-            System.out.println("Tu cuenta no está activa o estás intentando transferir a tu propia cuenta.");
-        }
+        if (!estaA) {throw new InactiveAccountException("La cuenta no está activa");}
+        if (cuentaDestino == this.titular) {throw new InactiveAccountException("La cuenta de destino es la misma cuenta");}
+        if (cuentaDestino == null) {throw new InactiveAccountException("La cuenta de destino no existe");}
+        // verifico el saldo de la cuenta
+        if (this.saldo < monto) {throw new InsufficientFundsException("No hay saldo suficiente");}
     }
     // metodo para llebar registro de las transferecias recibidas
     public void recibirTransferencia(double efectivo, String alias, String moneda) {
