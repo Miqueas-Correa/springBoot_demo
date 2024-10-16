@@ -1,4 +1,4 @@
-package ar.edu.utn.frbb.tup.springBoot_demo.controller;
+package ar.edu.utn.frbb.tup.springBoot_demo.controller.dto;
 
 import java.time.LocalDate;
 

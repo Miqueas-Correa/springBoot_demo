@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.CuentaDto;
+import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cuenta;
 import ar.edu.utn.frbb.tup.springBoot_demo.persistence.DaoCuenta;
 

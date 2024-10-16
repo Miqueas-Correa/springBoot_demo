@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.CuentaDto;
+import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cliente;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cuenta;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.DataAccessException;

@@ -1,7 +1,7 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.model;
 import java.time.LocalDateTime;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.CuentaDto;
+import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.InactiveAccountException;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.InsufficientFundsException;
 

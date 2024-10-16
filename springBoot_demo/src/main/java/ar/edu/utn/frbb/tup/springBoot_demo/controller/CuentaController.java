@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.controller.validator.CuentaValidator;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cuenta;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.ClienteAlreadyExistsException;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.CuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.springBoot_demo.service.ServiceCuenta;
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.CuentaDto;
 
 @RestController
 @RequestMapping("/cuenta")
