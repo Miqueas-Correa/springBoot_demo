@@ -56,7 +56,7 @@ public class TestServiceCliente {
     @Test
     public void testBuscarClientePorDni() {
         Long dni = 12345678L;
-        Cliente cliente = new Cliente();
+        Movimiento cliente = new Movimiento();
         cliente.setDni(dni);
         when(daoCliente.BuscarClientePorDni(dni)).thenReturn(cliente);
 

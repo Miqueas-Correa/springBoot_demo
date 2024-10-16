@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.ClienteDto;
+import ar.edu.utn.frbb.tup.springBoot_demo.controller.Cuenta;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cliente;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.ClienteAlreadyExistsException;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.InvalidAgeException;
@@ -24,7 +24,7 @@ public class ServiceCliente {
     }
 
     // modificar el cliente
-    public Cliente update(ClienteDto clienteDto, long dni) {
+    public Cliente update(Cuenta clienteDto, long dni) {
         // no nesesito validar xq se encarga el cliente validator antes de llegar aca
         // acutualizo y devuelvo el cliente actualizado
         return daoCliente.updateCliente(clienteDto, dni);
@@ -70,16 +70,11 @@ public class ServiceCliente {
     }
 
     // metodo para dar de alta
-    public Cliente darDeAltaCliente(ClienteDto clienteDto) throws ClienteAlreadyExistsException {
+    public Cliente darDeAltaCliente(Cuenta clienteDto) throws ClienteAlreadyExistsException {
         Cliente cliente = new Cliente(clienteDto);
 
-        if (daoCliente.buscarClientePorDni(cliente.getDni()) != null) {
-            throw new ClienteAlreadyExistsException("Ya existe un cliente con DNI " + cliente.getDni());
-        }
-
-        if (cliente.getEdad() < 18) {
-            throw new IllegalArgumentException("El cliente debe ser mayor a 18 años");
-        }
+        if (daoCliente.buscarClientePorDni(cliente.getDni()) != null) throw new ClienteAlreadyExistsException("Ya existe un cliente con DNI " + cliente.getDni());
+        if (cliente.getEdad() < 18) throw new IllegalArgumentException("El cliente debe ser mayor a 18 años");
 
         daoCliente.save(cliente);
         return cliente;

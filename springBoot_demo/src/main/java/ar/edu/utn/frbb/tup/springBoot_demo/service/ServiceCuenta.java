@@ -1,22 +1,25 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frbb.tup.springBoot_demo.controller.CuentaDto;
-import ar.edu.utn.frbb.tup.springBoot_demo.model.Banco;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cuenta;
-import ar.edu.utn.frbb.tup.springBoot_demo.parsistence.DaoCuenta;
+import ar.edu.utn.frbb.tup.springBoot_demo.persistence.DaoCuenta;
 
 @Service
 public class ServiceCuenta {
+    private DaoCuenta DaoCuenta;
 
-    public boolean validarCbu(Long cbu){
-        if (String.valueOf(cbu).length() == 16 && cbu > 0) return true;
-        return false;
+    // traer todas las cuentas
+    public List<Cuenta> darCuentas(){
+        return DaoCuenta.listarCuentas();
     }
 
-    public static boolean validarAlias(String alias, Banco banco){
-        return banco.buscarAlias(alias);
+    // buscar cuenta por numero de cuenta
+    public Cuenta buscarCuenta(Long numeroCuenta){
+        return DaoCuenta.buscarCuenta(numeroCuenta);
     }
 
     // save
@@ -70,17 +73,6 @@ public class ServiceCuenta {
 
     // metodo para dar de alta la cuenta
     public Cuenta darDeAltaCuenta(CuentaDto cuentaDto){
-        if (cuentaDto == null) throw new IllegalArgumentException("Error: no se pudo dar de alta la cuenta.");
-        if (cuentaDto.getNombre() == null || cuentaDto.getNombre_y_apellido().isEmpty()) throw new IllegalArgumentException("Error: el nombre no puede ser nulo o vacio.");
-        if (cuentaDto.getAlias() == null || cuentaDto.getAlias().isEmpty()) throw new IllegalArgumentException("Error: el alias no puede ser nulo o vacio.");
-        if (cuentaDto.getTipo() == null || cuentaDto.getTipo().isEmpty()) throw new IllegalArgumentException("Error: el tipo no puede ser nulo o vacio.");
-        if (cuentaDto.getFechaNacimiento() == null) throw new IllegalArgumentException("Error: la fecha de nacimiento no puede ser nula.");
-        if (cuentaDto.getFechaApertura() == null) throw new IllegalArgumentException("Error: la fecha de apertura no puede ser nula.");
-        if (cuentaDto.getSaldo() == null) throw new IllegalArgumentException("Error: el saldo no puede ser nulo.");
-        if (cuentaDto.getSaldo() < 0) throw new IllegalArgumentException("Error: el saldo debe ser mayor a 0.");
-        if (cuentaDto.getCvu() == null) throw new IllegalArgumentException("Error: el cvu no puede ser nulo.");
-        if (cuentaDto.getCvu() < 0 && cuentaDto.getCvu().toString().length() !) throw new IllegalArgumentException("Error: el cvu debe ser mayor a 0.");
-
-
+        Cuenta cuenta = new Cuenta(cuentaDto);
     }
 }

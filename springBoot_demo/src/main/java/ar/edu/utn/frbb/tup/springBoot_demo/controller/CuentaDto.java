@@ -1,5 +1,6 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class CuentaDto {
@@ -9,6 +10,7 @@ public class CuentaDto {
     private boolean estaA;
     private List<String> movimientos;
     private double saldo;
+    private LocalDateTime fechaCreacion;
 
     // Getters and setters
     public boolean getEstaA() {
@@ -46,5 +48,11 @@ public class CuentaDto {
     }
     public void setTitular(long dniTitular) {
         this.titular = dniTitular;
+    }
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
+    }
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 }

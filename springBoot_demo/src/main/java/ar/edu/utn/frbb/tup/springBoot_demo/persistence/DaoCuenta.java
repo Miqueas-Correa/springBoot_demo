@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ar.edu.utn.frbb.tup.springBoot_demo.controller.CuentaDto;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.Cliente;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cuenta;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.DataAccessException;
 
@@ -20,6 +21,36 @@ public class DaoCuenta extends AbstractBaseDao {
     @Override
     protected String getEntityName() {
         return "Cuenta";
+    }
+
+    // listar cuentas
+    public List<Cuenta> listarCuentas() {
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(FILE_PATH_CUENTAS));
+            List<Cuenta> cuentas = new ArrayList<>();
+            for (String line : lines) {
+                Cuenta cuenta = parseCuenta(line);
+                if (cuenta!= null) cuentas.add(cuenta);
+            }
+            return cuentas;
+        } catch (IOException e) {
+            return Collections.emptyList();
+        }
+    }
+
+    // buscar cuenta por numero de cuenta
+    public Cuenta buscarCuenta(Long numeroCuenta) {
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(FILE_PATH_CUENTAS));
+            for (String line : lines) {
+                Cuenta cuenta = parseCuenta(line);
+                if (cuenta.getNumeroCuenta().equals(numeroCuenta)) return cuenta;
+            }
+        } catch (IOException e) {
+            // lanza una excepción si no se puede leer el archivo
+            throw new DataAccessException("Error al leer el archivo de cuentas", e);
+        }
+        return null;
     }
 
     // listar las cuentas del cliente
