@@ -1,6 +1,6 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.controller.validator;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.ClienteDto;
+import ar.edu.utn.frbb.tup.springBoot_demo.controller.Cuenta;
 import ar.edu.utn.frbb.tup.springBoot_demo.service.ServiceCliente;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.ClienteAlreadyExistsException;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.InvalidAgeException;
@@ -15,7 +15,7 @@ public class ClienteValidator {
     @Autowired
     private ServiceCliente serviceCliente;
 
-    public void validate(ClienteDto clienteDto) throws ClienteAlreadyExistsException, InvalidAgeException {
+    public void validate(Cuenta clienteDto) throws ClienteAlreadyExistsException, InvalidAgeException {
         validateDni(clienteDto.getDni());
         validateNombre(clienteDto.getNombre_y_apellido());
         validateFechaNacimiento(clienteDto.getFechaNacimiento());

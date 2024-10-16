@@ -22,6 +22,21 @@ public class DaoCliente extends AbstractBaseDao {
         return "Cliente";
     }
 
+    // listar todos los clientes
+    public List<Cliente> listarClientes() {
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(FILE_PATH_CLIENTES));
+            List<Cliente> clientes = new ArrayList<>();
+            for (String line : lines) {
+                Cliente cliente = parseCliente(line);
+                if (cliente!= null) clientes.add(cliente);
+            }
+            return clientes;
+        } catch (IOException e) {
+            return Collections.emptyList();
+        }
+    }
+
     // modificar el cliente
     public Cliente updateCliente(ClienteDto clienteDto, long dni) {
         try {
@@ -94,29 +109,10 @@ public class DaoCliente extends AbstractBaseDao {
             List<String> lines = Files.readAllLines(Paths.get(FILE_PATH_CLIENTES));
             for (String line : lines) {
                 Cliente cliente = parseCliente(line);
-                if (cliente.getDni().equals(dni)) {
-                    return cliente;
-                }
+                if (cliente.getDni().equals(dni)) return cliente;
             }
         } catch (IOException e) {
-            System.out.println("No se pudo leer el cliente");
-        }
-        return null;
-    }
-
-    public List<Cliente> listarClientes() {
-        try {
-            List<String> lines = Files.readAllLines(Paths.get(FILE_PATH_CLIENTES));
-            List<Cliente> clientes = new ArrayList<>();
-            for (String line : lines) {
-                Cliente cliente = parseCliente(line);
-                if (cliente!= null) {
-                    clientes.add(cliente);
-                }
-            }
-            return clientes;
-        } catch (IOException e) {
-            System.out.println("No se pudo leer el cliente");
+            throw new DataAccessException("No se pudo buscar el cliente", e);
         }
         return null;
     }

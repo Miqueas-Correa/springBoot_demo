@@ -2,7 +2,7 @@ package ar.edu.utn.frbb.tup.springBoot_demo.model;
 
 import java.time.LocalDate;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.ClienteDto;
+import ar.edu.utn.frbb.tup.springBoot_demo.controller.Cuenta;
 
 public class Cliente extends Persona {
     // Atributos
@@ -15,7 +15,7 @@ public class Cliente extends Persona {
         this.banco = banco;
         this.fecha_de_alta = LocalDate.now();
     }
-    public Cliente(ClienteDto clienteDto) {
+    public Cliente(Cuenta clienteDto) {
         super(clienteDto.getNombre_y_apellido(), clienteDto.getTelefono(), clienteDto.getEmail(), clienteDto.getFechaNacimiento(), clienteDto.getDni());
         fecha_de_alta = LocalDate.now();
         banco = clienteDto.getBanco();

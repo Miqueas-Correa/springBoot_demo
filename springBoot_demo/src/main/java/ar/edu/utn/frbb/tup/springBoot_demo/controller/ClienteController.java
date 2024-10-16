@@ -32,12 +32,9 @@ public class ClienteController {
     // GET /cliente
     @GetMapping
     public ResponseEntity<List<Cliente>> darClientes() {
-        if (serviceCliente.darClientes().isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 operacion exitosa pero sin contenido
-        }
-        else {
-            return new ResponseEntity<>(serviceCliente.darClientes(), HttpStatus.OK); // 200
-        }
+        // 204 operacion exitosa pero sin contenido
+        if (serviceCliente.darClientes().isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(serviceCliente.darClientes(), HttpStatus.OK); // 200
     }
 
     // GET /cliente/{id}
@@ -49,7 +46,7 @@ public class ClienteController {
 
     // POST /cliente
     @PostMapping
-    public ResponseEntity<Cliente> crearCliente(@RequestBody ClienteDto clienteDto) {
+    public ResponseEntity<Cliente> crearCliente(@RequestBody Cuenta clienteDto) {
         try {
             clienteValidator.validate(clienteDto); // si no se lanza una excepcion, el cliente es valido
             return new ResponseEntity<>(serviceCliente.darDeAltaCliente(clienteDto), HttpStatus.CREATED); // 201
@@ -60,7 +57,7 @@ public class ClienteController {
 
     // PUT /cliente/{id}
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> modificarCliente(@RequestBody ClienteDto clienteDto, @PathVariable Long id) {
+    public ResponseEntity<Cliente> modificarCliente(@RequestBody Cuenta clienteDto, @PathVariable Long id) {
         if (serviceCliente.buscarClientePorDni(id) == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404
         try {
             clienteValidator.validate(clienteDto); // si no se lanza una excepcion, el cliente es valido
