@@ -2,14 +2,12 @@ package ar.edu.utn.frbb.tup.springBoot_demo.model;
 import java.time.LocalDateTime;
 
 import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.CuentaDto;
-import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.InactiveAccountException;
-import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.InsufficientFundsException;
 
 public class Cuenta {
+    private Long numeroCuenta;
     private boolean estaA;
     private Long titular;
     private double saldo;
-    private Long numeroCuenta;
     private String tipoCuenta;
     private String moneda;
     private LocalDateTime fechaCreacion;
@@ -21,13 +19,13 @@ public class Cuenta {
         this.saldo = cuentaDto.getSaldo();
         this.tipoCuenta = cuentaDto.getTipoCuenta();
         this.moneda = cuentaDto.getMoneda();
-        this.fechaCreacion = cuentaDto.getFechaCreacion();
+        this.fechaCreacion = LocalDateTime.now();
     }
 
     // metodo toString
     @Override
     public String toString(){
-        return this.titular.toString() + ";" + this.estaA + ";" + this.saldo + ";" + this.numeroCuenta.toString() + ";" + this.tipoCuenta + ";" + this.moneda.toString() + ";" + this.fechaCreacion.toString();
+        return this.numeroCuenta.toString() + ";" + this.titular.toString() + ";" + this.estaA + ";" + this.saldo + ";" + this.tipoCuenta + ";" + this.moneda.toString() + ";" + this.fechaCreacion.toString();
     }
 
     // Getters y Setters
@@ -69,20 +67,5 @@ public class Cuenta {
     }
     public LocalDateTime getFechaCreacion() {
         return this.fechaCreacion;
-    }
-    public void setFechaCreacion(LocalDateTime fecha_de_apertura) {
-        this.fechaCreacion = fecha_de_apertura;
-    }
-
-
-    // Métodos
-    public void deposito(double efectivo) throws InactiveAccountException{
-        if (!this.estaA) throw new InactiveAccountException("La cuenta esta inactiva.");
-        this.saldo += efectivo;
-    }
-    public void retiro(double efectivo) throws InactiveAccountException, InsufficientFundsException{
-        if (!this.estaA) throw new InactiveAccountException("La cuenta esta inactiva.");
-        if(this.saldo >= efectivo) throw new InsufficientFundsException("No hay saldo suficiente.");
-        this.saldo =- efectivo;
     }
 }
