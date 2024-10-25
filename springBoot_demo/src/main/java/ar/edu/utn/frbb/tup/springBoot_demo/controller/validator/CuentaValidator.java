@@ -16,15 +16,14 @@ public class CuentaValidator {
         validateSaldo(cuentaDto.getSaldo());
         validateMovimientos(cuentaDto.getMovimientos());
         validateEstaA(cuentaDto.getEstaA());
-        validateFechaCreacion(cuentaDto.getFechaCreacion());
     }
 
     private void validateTipoCuenta(String tipoCuenta) {
-        if (!"C".equals(tipoCuenta) || !"A".equals(tipoCuenta)) throw new IllegalArgumentException("Tipo de cuenta no soportada");
+        if (!"C".equalsIgnoreCase(tipoCuenta) || !"A".equalsIgnoreCase(tipoCuenta)) throw new IllegalArgumentException("Tipo de cuenta no soportada");
     }
 
     private void validateMoneda(String moneda) {
-        if (!"P".equals(moneda) ||!"D".equals(moneda)) throw new IllegalArgumentException("Moneda no soportada");
+        if (!"P".equalsIgnoreCase(moneda) ||!"D".equalsIgnoreCase(moneda)) throw new IllegalArgumentException("Moneda no soportada");
     }
 
     public void validateTitular(Long titular) {
