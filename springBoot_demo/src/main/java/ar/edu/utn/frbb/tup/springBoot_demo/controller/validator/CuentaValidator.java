@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.CuentaDto;
+import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.CuentaDto;
 
 @Component
 public class CuentaValidator {
