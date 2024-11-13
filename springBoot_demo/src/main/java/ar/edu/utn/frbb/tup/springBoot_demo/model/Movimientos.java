@@ -10,6 +10,8 @@ public class Movimientos {
     private LocalDateTime fecha_y_hs;
     private Long numeroCuenta;
 
+    // constructor
+    public Movimientos(){}
     public Movimientos(MovimientosDto movimientosDto){
         this.descripcion = movimientosDto.getDescripcion();
         this.numeroCuenta = movimientosDto.getNumeroCuenta();
