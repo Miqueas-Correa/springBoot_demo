@@ -1,18 +1,10 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.service;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.springframework.stereotype.Service;
-
 import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cliente;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.ClienteAlreadyExistsException;
-import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.InvalidAgeException;
 import ar.edu.utn.frbb.tup.springBoot_demo.persistence.DaoCliente;
 
 @Service
@@ -31,8 +23,9 @@ public class ServiceCliente {
     }
 
     // guardar cliente
-    public void save(Cliente cliente) {
-        if (cliente == null) throw new IllegalArgumentException("El cliente no puede ser nulo");
+    public void save(ClienteDto clienteDto) {
+        if (clienteDto == null) throw new IllegalArgumentException("El cliente no puede ser nulo");
+        Cliente cliente = new Cliente(clienteDto);
         daoCliente.save(cliente);
     }
 
@@ -41,36 +34,12 @@ public class ServiceCliente {
         return !nombre_del_banco.equalsIgnoreCase("nacion") && !nombre_del_banco.equalsIgnoreCase("provincia");
     }
 
-    // metodo para validar email
-    public boolean validarEmail(String email) {
-        String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
-    }
-
-    // metodo para validar fecha
-    public boolean validarFechaNacimiento(LocalDate fechaNac) {
-        try {
-            // isAfter compara dos fechas y devuelve true si la fecha 1 es posterior a la fecha 2
-            if (!fechaNac.isAfter(LocalDate.now())) {
-                // between calcula el periodo entre dos fechas
-                Period periodo = Period.between(fechaNac, LocalDate.now());
-                // getYears devuelve el número de años entre dos fechas
-                return periodo.getYears() >= 18;
-            }
-            throw new InvalidAgeException("La edad no puede ser en el futuro.");
-        } catch (DateTimeParseException e) {
-            throw new InvalidAgeException("Formato de fecha no válido. Por favor, ingrese la fecha en el formato YYYY-MM-DD.");
-        }
-    }
-
     public Cliente buscarClientePorDni(Long dni) {
         return daoCliente.buscarClientePorDni(dni);
     }
 
     // metodo para dar de alta
-    public Cliente darDeAltaCliente(ClienteDto clienteDto) throws ClienteAlreadyExistsException {
+    public Cliente altaCliente(ClienteDto clienteDto) throws ClienteAlreadyExistsException {
         Cliente cliente = new Cliente(clienteDto);
 
         if (daoCliente.buscarClientePorDni(cliente.getDni()) != null) throw new ClienteAlreadyExistsException("Ya existe un cliente con DNI " + cliente.getDni());
@@ -81,8 +50,8 @@ public class ServiceCliente {
     }
 
     // metodo para dar de baja
-    public void darDeBajaCliente(Long dni) {
-        daoCliente.deleteCliente(dni);
+    public void bajaCliente(Long dni) {
+        daoCliente.bajaCliente(dni);
     }
 
     // mostrar lista de clientes

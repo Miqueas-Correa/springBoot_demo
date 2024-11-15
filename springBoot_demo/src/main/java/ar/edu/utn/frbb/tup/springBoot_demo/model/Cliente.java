@@ -15,6 +15,7 @@ public class Cliente extends Persona {
         fecha_de_alta = LocalDate.now();
         banco = clienteDto.getBanco();
     }
+    public Cliente() {super();}
 
     // Getters y Setters
     public String getBanco() {

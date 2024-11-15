@@ -17,6 +17,7 @@ public class Persona {
         this.fecha_de_nacimiento = fecha_de_nacimiento;
         this.dni = dni;
     }
+    public Persona(){}
 
     // Getters y Setters
     public String getNombre_y_apellido(){
@@ -48,5 +49,11 @@ public class Persona {
     }
     public void setDni(Long dni){
         this.dni = dni;
+    }
+
+    // Método para calcular la edad
+    public int getEdad(){
+        LocalDate fechaActual = LocalDate.now();
+        return fechaActual.getYear() - this.fecha_de_nacimiento.getYear();
     }
 }

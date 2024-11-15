@@ -50,7 +50,7 @@ public class ClienteController {
     public ResponseEntity<Cliente> crearCliente(@RequestBody ClienteDto clienteDto) {
         try {
             clienteValidator.validate(clienteDto); // si no se lanza una excepcion, el cliente es valido
-            return new ResponseEntity<>(serviceCliente.darDeAltaCliente(clienteDto), HttpStatus.CREATED); // 201
+            return new ResponseEntity<>(serviceCliente.altaCliente(clienteDto), HttpStatus.CREATED); // 201
         } catch (ClienteAlreadyExistsException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT); // 409
         }
@@ -69,11 +69,11 @@ public class ClienteController {
     }
 
     // DELETE /cliente/{id}
-    @DeleteMapping("/baja/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Cliente> darDeBajaCliente(@PathVariable Long id) {
         if (serviceCliente.buscarClientePorDni(id) == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404
         try {
-            serviceCliente.darDeBajaCliente(id);
+            serviceCliente.bajaCliente(id);
             return new ResponseEntity<>(HttpStatus.OK); // 200
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
