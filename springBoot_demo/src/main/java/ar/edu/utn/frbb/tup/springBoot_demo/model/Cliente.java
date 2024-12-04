@@ -2,7 +2,7 @@ package ar.edu.utn.frbb.tup.springBoot_demo.model;
 
 import java.time.LocalDate;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.ClienteDto;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.ClienteDto;
 
 public class Cliente extends Persona {
     // Atributos

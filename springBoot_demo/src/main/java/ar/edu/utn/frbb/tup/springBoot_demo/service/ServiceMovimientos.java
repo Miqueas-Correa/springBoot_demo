@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Movimientos;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.persistence.DaoMovimientos;
 
 @Service

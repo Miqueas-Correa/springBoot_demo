@@ -1,4 +1,4 @@
-package ar.edu.utn.frbb.tup.springBoot_demo.controller.dto;
+package ar.edu.utn.frbb.tup.springBoot_demo.model.dto;
 
 public class MovimientosDto {
     private String descripcion;

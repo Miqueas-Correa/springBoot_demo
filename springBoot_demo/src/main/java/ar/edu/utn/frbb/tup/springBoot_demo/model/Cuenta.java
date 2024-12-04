@@ -1,7 +1,7 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.model;
 import java.time.LocalDateTime;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.CuentaDto;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.CuentaDto;
 
 public class Cuenta {
     private Long numeroCuenta;
@@ -13,6 +13,7 @@ public class Cuenta {
     private LocalDateTime fechaCreacion;
 
     // constructor
+    public Cuenta(){}
     public Cuenta(CuentaDto cuentaDto){
         this.estaA = true;
         this.titular = cuentaDto.getTitular();
@@ -26,6 +27,17 @@ public class Cuenta {
     @Override
     public String toString(){
         return this.numeroCuenta.toString() + ";" + this.titular.toString() + ";" + this.estaA + ";" + this.saldo + ";" + this.tipoCuenta + ";" + this.moneda.toString() + ";" + this.fechaCreacion.toString();
+    }
+    // metodo transferencia
+    public void transferencia(Cuenta cuentaDestino, double monto){
+        this.saldo -= monto;
+        cuentaDestino.saldo += monto;
+    }
+    public void depositar(double monto){
+        this.saldo += monto;
+    }
+    public void retirar(double monto){
+        this.saldo -= monto;
     }
 
     // Getters y Setters
@@ -67,5 +79,8 @@ public class Cuenta {
     }
     public LocalDateTime getFechaCreacion() {
         return this.fechaCreacion;
+    }
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 }

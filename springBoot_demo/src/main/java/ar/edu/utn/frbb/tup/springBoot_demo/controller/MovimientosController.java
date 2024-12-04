@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.controller.validator.MovimientosValidator;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Movimientos;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.MovimientoAlreadyExistsException;
 import ar.edu.utn.frbb.tup.springBoot_demo.service.ServiceMovimientos;
 

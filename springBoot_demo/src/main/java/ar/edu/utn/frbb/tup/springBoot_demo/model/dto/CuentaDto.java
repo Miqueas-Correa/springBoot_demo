@@ -1,13 +1,10 @@
-package ar.edu.utn.frbb.tup.springBoot_demo.controller.dto;
-
-import java.util.List;
+package ar.edu.utn.frbb.tup.springBoot_demo.model.dto;
 
 public class CuentaDto {
     private String tipoCuenta;
     private String moneda;
     private long titular;
     private boolean estaA;
-    private List<String> movimientos;
     private double saldo;
 
     // Getters and setters
@@ -16,12 +13,6 @@ public class CuentaDto {
     }
     public void setEstaA(boolean estaA) {
         this.estaA = estaA;
-    }
-    public List<String> getMovimientos() {
-        return movimientos;
-    }
-    public void setMovimientos(List<String> movimientos) {
-        this.movimientos = movimientos;
     }
     public double getSaldo() {
         return saldo;

@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cliente;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.ClienteNotFoundException;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.DataAccessException;
 

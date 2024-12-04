@@ -2,8 +2,9 @@ package ar.edu.utn.frbb.tup.springBoot_demo.service;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.ClienteDto;
+
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cliente;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.ClienteAlreadyExistsException;
 import ar.edu.utn.frbb.tup.springBoot_demo.persistence.DaoCliente;
 
@@ -27,11 +28,6 @@ public class ServiceCliente {
         if (clienteDto == null) throw new IllegalArgumentException("El cliente no puede ser nulo");
         Cliente cliente = new Cliente(clienteDto);
         daoCliente.save(cliente);
-    }
-
-    // verificar que el nombre del banco sea nacion o provincia, que solo tenga solo estos 2 es solo tema de diseño
-    public boolean nombre_del_banco(String nombre_del_banco) {
-        return !nombre_del_banco.equalsIgnoreCase("nacion") && !nombre_del_banco.equalsIgnoreCase("provincia");
     }
 
     public Cliente buscarClientePorDni(Long dni) {

@@ -6,13 +6,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.CuentaDto;
-import ar.edu.utn.frbb.tup.springBoot_demo.model.Cliente;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cuenta;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.DataAccessException;
 
 public class DaoCuenta extends AbstractBaseDao {
@@ -71,31 +68,41 @@ public class DaoCuenta extends AbstractBaseDao {
         }
         return cuentasFiltradas == null ? Collections.emptyList() : cuentasFiltradas;
     }
+
     // actualizo la cuenta
-    public void updateCuenta(CuentaDto cuentaDto, long titular) {
+    public Cuenta update(CuentaDto cuentaDto, long numeroCuenta) {
         try {
             // Leer todas las líneas del archivo
             List<String> lineas = Files.readAllLines(Paths.get(FILE_PATH_CUENTAS));
+            boolean cuentaActualizada = false;
+            Cuenta cuenta = buscarCuenta(numeroCuenta);
 
             // Buscar y modificar la línea que corresponde a la cuenta del cliente
             for (int i = 0; i < lineas.size(); i++) {
-                if (lineas.get(i).startsWith(String.valueOf(titular))) {
-                    Cuenta cuenta = buscarCuentaPorTitular(titular); // no valido que no sea nulo xq se valida antes
-                    // considero que solo estos datos pueden ser modificados
-                    cuenta.setEstaA(cuentaDto.getEstaA());
-                    cuenta.setSaldo(cuentaDto.getSaldo());
-                    cuenta.setTipoCuenta(cuentaDto.getTipoCuenta());
-                    cuenta.setMoneda(cuentaDto.getMoneda());
-                    cuenta.setMovimientos(cuentaDto.getMovimientos());
-                    // Crear la nueva línea con los datos actualizados
-                    String updatedCuentaData = cuenta.toString();
-                    // Actualizar la línea en la lista
-                    lineas.set(i, updatedCuentaData);
-                    break;
+                if (lineas.get(i).startsWith(String.valueOf(numeroCuenta))) {
+                    if (cuenta != null) {
+                        // Considero que solo estos datos pueden ser modificados
+                        cuenta.setEstaA(cuentaDto.getEstaA());
+                        cuenta.setSaldo(cuentaDto.getSaldo());
+                        cuenta.setTipoCuenta(cuentaDto.getTipoCuenta());
+                        cuenta.setMoneda(cuentaDto.getMoneda());
+
+                        // Crear la nueva línea con los datos actualizados
+                        String updatedCuentaData = cuenta.toString();
+                        // Actualizar la línea en la lista
+                        lineas.set(i, updatedCuentaData);
+                        cuentaActualizada = true;
+                        break;
+                    }
                 }
             }
+
+            if (!cuentaActualizada) throw new DataAccessException("La cuenta no fue encontrada para actualizar.", null);
+
             // Sobrescribir el archivo con las líneas actualizadas
             Files.write(Paths.get(FILE_PATH_CUENTAS), lineas);
+
+            return cuenta;
         } catch (IOException e) {
             throw new DataAccessException("No se pudo actualizar la cuenta", e);
         }
@@ -120,25 +127,24 @@ public class DaoCuenta extends AbstractBaseDao {
     public void save(Cuenta cuenta) {
         try {
             // guardar cuenta en el archivo
-            Files.write(Paths.get(FILE_PATH_CUENTAS), Collections.singletonList(cuenta.toString()), StandardOpenOption.APPEND);
+            Files.write(Paths.get(FILE_PATH_CUENTAS), Collections.singletonList(cuenta.toString() + System.lineSeparator()), StandardOpenOption.APPEND);
         } catch (IOException e) {
             throw new DataAccessException("No se pudo guardar la cuenta correctamente", e);
         }
     }
 
-    // parseo el archivo y lo guardo en un cliente
-    public static Cuenta parseCuenta(String data) {
+    // parseo el archivo y lo guardo en una cuenta
+    public Cuenta parseCuenta(String data) {
         String[] parts = data.split(";");
         if (parts.length >= 8) {
             Cuenta cuenta = new Cuenta();
-            cuenta.setTitular(Long.valueOf(parts[0]));
-            cuenta.setEstaA(Boolean.parseBoolean(parts[1]));
-            cuenta.setSaldo(Double.parseDouble(parts[2]));
-            cuenta.setNumeroCuenta(Long.valueOf(parts[4]));
-            cuenta.setTipoCuenta(parts[5]);
+            cuenta.setNumeroCuenta(Long.valueOf(parts[0]));
+            cuenta.setTitular(Long.valueOf(parts[1]));
+            cuenta.setEstaA(Boolean.parseBoolean(parts[2]));
+            cuenta.setSaldo(Double.parseDouble(parts[3]));
+            cuenta.setTipoCuenta(parts[4]);
             cuenta.setMoneda(parts[6]);
-            cuenta.setMovimientos(new ArrayList<>(Arrays.asList(null == parts[7]? new String[0] : parts[7].split(","))));
-            cuenta.setFechaCreacion(LocalDateTime.parse(parts[8]));
+            cuenta.setFechaCreacion(LocalDateTime.parse(parts[7]));
             return cuenta;
         }
         return null;

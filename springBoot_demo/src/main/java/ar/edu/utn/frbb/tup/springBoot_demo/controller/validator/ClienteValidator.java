@@ -1,7 +1,7 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.controller.validator;
 
 import ar.edu.utn.frbb.tup.springBoot_demo.service.ServiceCliente;
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.ClienteDto;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.ClienteAlreadyExistsException;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.InvalidAgeException;
 
@@ -35,11 +35,16 @@ public class ClienteValidator {
     private void validateEmail(String email) {
         if (email == null) throw new IllegalArgumentException("El email no puede ser nulo");
         if (email.length() > 30) throw new IllegalArgumentException("El email no puede tener mas de 30 caracteres");
-        if (serviceCliente.validarEmail(email)) throw new IllegalArgumentException("El email debe ser de esta manera: ejemplo@ejemplo.com");
+        if (!validarEmail(email)) throw new IllegalArgumentException("El email debe ser de esta manera: ejemplo@ejemplo.com");
+    }
+    private static boolean validarEmail(String email) {
+        // Expresión regular para validar un email
+        String regex = "^[\\w-\\.]+@[\\w-]+\\.[a-z]{2,7}$";
+        return email != null && email.matches(regex);
     }
     // validar banco
     private void validateBanco(String banco) {
-        if (!serviceCliente.nombre_del_banco(banco)) throw new IllegalArgumentException("El banco debe ser nacion o provincia");
+        if (banco.equals("nacion") || banco.equals("provincia")) throw new IllegalArgumentException("El banco debe ser nacion o provincia");
     }
     // validar dni
     private void validateDni(Long dni) throws ClienteAlreadyExistsException {
@@ -56,6 +61,5 @@ public class ClienteValidator {
     // validar fecha de nacimiento
     private void validateFechaNacimiento(LocalDate fechaNacimiento)throws InvalidAgeException {
         if (fechaNacimiento == null) throw new IllegalArgumentException("La fecha de nacimiento no puede ser nula.");
-        if (!serviceCliente.validarFechaNacimiento(fechaNacimiento)) throw new InvalidAgeException("La persona debe tener al menos 18 años.");
     }
 }

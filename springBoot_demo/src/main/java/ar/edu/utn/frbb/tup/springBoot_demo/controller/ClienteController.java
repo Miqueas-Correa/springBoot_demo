@@ -1,8 +1,8 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.controller;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.controller.validator.ClienteValidator;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cliente;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.ClienteAlreadyExistsException;
 import ar.edu.utn.frbb.tup.springBoot_demo.service.ServiceCliente;
 

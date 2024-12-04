@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Movimientos;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.DataAccessException;
 
 public class DaoMovimientos extends AbstractBaseDao {
@@ -60,8 +60,9 @@ public class DaoMovimientos extends AbstractBaseDao {
     // parseo el archivo y lo guardo en un banco
     public void save(MovimientosDto movimientosDto) {
         try {
+            Movimientos movimientos = new Movimientos(movimientosDto);
             // guardar el cliente en el archivo
-            Files.write(Paths.get(FILE_PATH_MOVIMIENTOS), Collections.singletonList(movimientosDto.toString()), StandardOpenOption.APPEND);
+            Files.write(Paths.get(FILE_PATH_MOVIMIENTOS), Collections.singletonList(movimientos.toString()), StandardOpenOption.APPEND);
         } catch (IOException e) {
             throw new DataAccessException("No se pudo guardar el movimiento", e);
         }

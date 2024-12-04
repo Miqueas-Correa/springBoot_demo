@@ -1,6 +1,6 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.controller.validator;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.MovimientosDto;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.MovimientosDto;
 
 public class MovimientosValidator {
     public void validate(MovimientosDto movimientosDto) {

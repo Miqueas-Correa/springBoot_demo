@@ -2,7 +2,7 @@ package ar.edu.utn.frbb.tup.springBoot_demo.model;
 
 import java.time.LocalDateTime;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.MovimientosDto;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.MovimientosDto;
 
 public class Movimientos {
     private Long id;
