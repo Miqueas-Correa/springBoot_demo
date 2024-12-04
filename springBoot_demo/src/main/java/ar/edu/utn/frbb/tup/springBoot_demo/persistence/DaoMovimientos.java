@@ -61,6 +61,8 @@ public class DaoMovimientos extends AbstractBaseDao {
     public void save(MovimientosDto movimientosDto) {
         try {
             Movimientos movimientos = new Movimientos(movimientosDto);
+            // genero el id al movimiento
+            movimientos.setId(generateId(FILE_PATH_MOVIMIENTOS));
             // guardar el cliente en el archivo
             Files.write(Paths.get(FILE_PATH_MOVIMIENTOS), Collections.singletonList(movimientos.toString()), StandardOpenOption.APPEND);
         } catch (IOException e) {

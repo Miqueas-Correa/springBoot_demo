@@ -126,6 +126,8 @@ public class DaoCuenta extends AbstractBaseDao {
     // parseo el archivo y lo guardo en un banco
     public void save(Cuenta cuenta) {
         try {
+            // genero el numero de cuenta
+            cuenta.setNumeroCuenta(generateId(FILE_PATH_CUENTAS));
             // guardar cuenta en el archivo
             Files.write(Paths.get(FILE_PATH_CUENTAS), Collections.singletonList(cuenta.toString() + System.lineSeparator()), StandardOpenOption.APPEND);
         } catch (IOException e) {

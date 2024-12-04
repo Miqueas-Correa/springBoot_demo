@@ -3,7 +3,6 @@ package ar.edu.utn.frbb.tup.springBoot_demo.persistence;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +17,8 @@ public abstract class AbstractBaseDao {
         }
         return poorMansDatabase.get(getEntityName());
     }
-    // ! IMPORTANTE: este método es para usarlo en el DAO de Cliente, Cuenta y Movimiento.
-    public static long generateId(String FILE_PATH) throws IOException {
+    // ! IMPORTANTE: este método es para usarlo en el DAO de Cuenta y Movimiento.
+    protected static long generateId(String FILE_PATH) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(FILE_PATH));
 
         if (lines.isEmpty()) throw new IOException("El archivo está vacío.");

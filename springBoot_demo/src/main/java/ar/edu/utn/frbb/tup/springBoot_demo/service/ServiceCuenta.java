@@ -124,8 +124,6 @@ public class ServiceCuenta {
     public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException {
         Cuenta cuenta = new Cuenta(cuentaDto);
 
-        if (daoCuenta.buscarCuenta(cuenta.getNumeroCuenta()) != null) throw new CuentaAlreadyExistsException("Ya existe una cuenta con el numero " + cuenta.getNumeroCuenta());
-
         daoCuenta.save(cuenta);
         return cuenta;
     }
