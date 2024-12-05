@@ -1,0 +1,2 @@
+12345678;Juan Perez;1234567890;juan.perez@example.com;1990-05-15;Banco XYZ;2024-01-01
+87654321;Maria Lopez;0987654321;maria.lopez@example.com;1985-10-20;Banco ABC;2023-06-15

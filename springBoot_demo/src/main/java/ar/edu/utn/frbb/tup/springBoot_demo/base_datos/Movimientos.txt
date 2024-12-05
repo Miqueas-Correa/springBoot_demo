@@ -1,0 +1,2 @@
+1;123456789;2024-12-05 13:13;Compra en supermercado
+2;987654321;2024-12-05 14:00;Pago de servicios
