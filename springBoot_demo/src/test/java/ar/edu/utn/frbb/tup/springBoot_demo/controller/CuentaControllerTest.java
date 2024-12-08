@@ -70,7 +70,7 @@ public class CuentaControllerTest {
     }
 
     @Test
-    void crearCuenta_WhenAlreadyExists_ReturnsConflict() throws CuentaAlreadyExistsException {
+    void crearCuenta_WhenAlreadyExists_ReturnsConflict() {
         CuentaDto dto = new CuentaDto();
         doThrow(CuentaAlreadyExistsException.class).when(cuentaValidator).validate(dto);
 
