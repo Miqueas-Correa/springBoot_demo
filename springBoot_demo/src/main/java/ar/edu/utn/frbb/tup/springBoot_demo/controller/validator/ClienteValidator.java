@@ -44,7 +44,7 @@ public class ClienteValidator {
     }
     // validar banco
     private void validateBanco(String banco) {
-        if (banco.equals("nacion") || banco.equals("provincia")) throw new IllegalArgumentException("El banco debe ser nacion o provincia");
+        if (banco == null || (!"nacion".equalsIgnoreCase(banco) && !"provincia".equalsIgnoreCase(banco))) throw new IllegalArgumentException("El banco debe ser nacion o provincia");
     }
     // validar dni
     private void validateDni(Long dni) throws ClienteAlreadyExistsException {

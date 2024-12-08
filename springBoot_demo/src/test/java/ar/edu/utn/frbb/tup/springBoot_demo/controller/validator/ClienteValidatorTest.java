@@ -1,7 +1,10 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.controller.validator;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
+
+import ar.edu.utn.frbb.tup.springBoot_demo.model.Cliente;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.ClienteAlreadyExistsException;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.InvalidAgeException;
@@ -37,7 +40,10 @@ public class ClienteValidatorTest {
 
     @Test
     void validateValidClienteDto() throws ClienteAlreadyExistsException, InvalidAgeException {
+        // Mockea el servicio para que devuelva null, indicando que el cliente no existe
         when(serviceCliente.buscarClientePorDni(anyLong())).thenReturn(null);
+
+        // Verifica que no se lanza ninguna excepción
         assertDoesNotThrow(() -> clienteValidator.validate(clienteDto));
     }
 
@@ -61,7 +67,12 @@ public class ClienteValidatorTest {
 
     @Test
     void validateDuplicateDni() throws ClienteAlreadyExistsException {
-        when(serviceCliente.buscarClientePorDni(anyLong())).thenReturn(new Object());
+        // Crea una instancia válida de Cliente
+        Cliente clienteMock = new Cliente();
+        clienteMock.setDni(12345678L); // Configura un DNI válido para el caso de prueba
+        // Configura el mock para devolver un objeto Cliente válido
+        when(serviceCliente.buscarClientePorDni(anyLong())).thenReturn(clienteMock);
+        // Ejecuta la prueba
         assertThrows(ClienteAlreadyExistsException.class, () -> clienteValidator.validate(clienteDto));
     }
 

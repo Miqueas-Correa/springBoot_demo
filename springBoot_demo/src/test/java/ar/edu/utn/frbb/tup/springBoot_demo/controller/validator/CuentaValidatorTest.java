@@ -3,7 +3,6 @@ package ar.edu.utn.frbb.tup.springBoot_demo.controller.validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.validator.CuentaValidator;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.CuentaDto;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

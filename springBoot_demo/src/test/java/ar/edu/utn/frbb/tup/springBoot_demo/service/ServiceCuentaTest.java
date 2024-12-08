@@ -1,11 +1,15 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cuenta;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.TransferirDto;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.CuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.springBoot_demo.persistence.DaoCuenta;
 import ar.edu.utn.frbb.tup.springBoot_demo.persistence.DaoMovimientos;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,22 +42,22 @@ public class ServiceCuentaTest {
         cuenta.setEstaA(true);
         cuenta.setTipoCuenta("CUENTA CORRIENTE");
         cuenta.setMoneda("USD");
-        cuenta.setTitular("John Doe");
+        cuenta.setTitular(12345678L);
 
         cuentaDto = new CuentaDto();
         cuentaDto.setSaldo(1000.0);
         cuentaDto.setEstaA(true);
         cuentaDto.setTipoCuenta("CUENTA CORRIENTE");
         cuentaDto.setMoneda("USD");
-        cuentaDto.setTitular("John Doe");
+        cuentaDto.setTitular(12345678L);
     }
 
     @Test
     void testDepositarExitoso() {
         when(daoCuenta.update(any(CuentaDto.class), anyLong())).thenReturn(cuenta);
-        
+
         var response = serviceCuenta.depositar(cuenta, 500.0);
-        
+
         assertEquals("EXITOSA", response.getEstado());
         assertEquals(1500.0, cuenta.getSaldo());
         verify(daoCuenta).update(any(CuentaDto.class), eq(1L));
@@ -62,17 +66,17 @@ public class ServiceCuentaTest {
     @Test
     void testDepositarCuentaInactiva() {
         cuenta.setEstaA(false);
-        
-        assertThrows(IllegalArgumentException.class, () -> 
+
+        assertThrows(IllegalArgumentException.class, () ->
             serviceCuenta.depositar(cuenta, 500.0));
     }
 
     @Test
     void testRetirarExitoso() {
         when(daoCuenta.update(any(CuentaDto.class), anyLong())).thenReturn(cuenta);
-        
+
         var response = serviceCuenta.retirar(cuenta, 500.0);
-        
+
         assertEquals("EXITOSA", response.getEstado());
         assertEquals(500.0, cuenta.getSaldo());
         verify(daoCuenta).update(any(CuentaDto.class), eq(1L));
@@ -105,26 +109,32 @@ public class ServiceCuentaTest {
     }
 
     @Test
-    void testDarDeAltaCuenta() throws Exception {
-        when(daoCuenta.save(any(Cuenta.class))).thenReturn(cuenta);
-        
+    void testDarDeAltaCuenta() throws CuentaAlreadyExistsException {
+        // Simula el comportamiento del método save (void)
+        doNothing().when(daoCuenta).save(any(Cuenta.class));
+
+        // Ejecuta el método que estás probando
         Cuenta nuevaCuenta = serviceCuenta.darDeAltaCuenta(cuentaDto);
-        
+
+        // Asegúrate de que la cuenta no es null
         assertNotNull(nuevaCuenta);
+
+        // Verifica que save fue llamado con cualquier objeto Cuenta
         verify(daoCuenta).save(any(Cuenta.class));
     }
 
+
     @Test
     void testRetirarMontoMayorAlSaldo() {
-        assertThrows(IllegalArgumentException.class, () -> 
+        assertThrows(IllegalArgumentException.class, () ->
             serviceCuenta.retirar(cuenta, 2000.0));
     }
 
     @Test
     void testRetirarDeCajaAhorro() {
         cuenta.setTipoCuenta("CAJA DE AHORRO");
-        
-        assertThrows(IllegalArgumentException.class, () -> 
+
+        assertThrows(IllegalArgumentException.class, () ->
             serviceCuenta.retirar(cuenta, 500.0));
     }
 }

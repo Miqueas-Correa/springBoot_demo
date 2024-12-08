@@ -30,15 +30,14 @@ public class ServiceClienteTest {
     @Test
     void testUpdateCliente() {
         ClienteDto clienteDto = new ClienteDto();
-        clienteDto.setNombre("Juan");
-        clienteDto.setApellido("Perez");
+        clienteDto.setNombre_y_apellido("Juan Perez");
         clienteDto.setDni(12345678L);
-        
+
         Cliente clienteExpected = new Cliente(clienteDto);
         when(daoCliente.updateCliente(clienteDto, 12345678L)).thenReturn(clienteExpected);
-        
+
         Cliente result = serviceCliente.update(clienteDto, 12345678L);
-        
+
         assertEquals(clienteExpected, result);
         verify(daoCliente).updateCliente(clienteDto, 12345678L);
     }
@@ -51,36 +50,33 @@ public class ServiceClienteTest {
     @Test
     void testSaveClienteSuccess() {
         ClienteDto clienteDto = new ClienteDto();
-        clienteDto.setNombre("Ana");
-        clienteDto.setApellido("Garcia");
+        clienteDto.setNombre_y_apellido("Ana Garcia");
         clienteDto.setDni(87654321L);
-        
+
         serviceCliente.save(clienteDto);
-        
+
         verify(daoCliente).save(any(Cliente.class));
     }
 
     @Test
     void testAltaClienteMenorEdad() {
         ClienteDto clienteDto = new ClienteDto();
-        clienteDto.setNombre("Pedro");
-        clienteDto.setApellido("Lopez");
+        clienteDto.setNombre_y_apellido("Pedro Martinez");
         clienteDto.setDni(11223344L);
-        clienteDto.setEdad(16);
-        
+        clienteDto.setFechaNacimiento(java.time.LocalDate.of(2010, 1, 1));
+
         assertThrows(IllegalArgumentException.class, () -> serviceCliente.altaCliente(clienteDto));
     }
 
     @Test
     void testAltaClienteExistente() {
         ClienteDto clienteDto = new ClienteDto();
-        clienteDto.setNombre("Maria");
-        clienteDto.setApellido("Martinez");
+        clienteDto.setNombre_y_apellido("Maria Rodriguez");
         clienteDto.setDni(99887766L);
-        clienteDto.setEdad(25);
-        
+        clienteDto.setFechaNacimiento(java.time.LocalDate.of(1990, 1, 1));
+
         when(daoCliente.buscarClientePorDni(99887766L)).thenReturn(new Cliente(clienteDto));
-        
+
         assertThrows(ClienteAlreadyExistsException.class, () -> serviceCliente.altaCliente(clienteDto));
     }
 
@@ -90,11 +86,11 @@ public class ServiceClienteTest {
             new Cliente(new ClienteDto()),
             new Cliente(new ClienteDto())
         );
-        
+
         when(daoCliente.listarClientes()).thenReturn(expectedClientes);
-        
+
         List<Cliente> result = serviceCliente.darClientes();
-        
+
         assertEquals(expectedClientes, result);
         verify(daoCliente).listarClientes();
     }
@@ -111,9 +107,9 @@ public class ServiceClienteTest {
         Long dni = 12345678L;
         Cliente expectedCliente = new Cliente(new ClienteDto());
         when(daoCliente.buscarClientePorDni(dni)).thenReturn(expectedCliente);
-        
+
         Cliente result = serviceCliente.buscarClientePorDni(dni);
-        
+
         assertEquals(expectedCliente, result);
         verify(daoCliente).buscarClientePorDni(dni);
     }
