@@ -84,8 +84,23 @@ public class ServiceCuenta {
         Cuenta cuentaOrigen = buscarCuenta(transferirDto.getCuentaOrigen());
         Cuenta cuentaDestino = buscarCuenta(transferirDto.getCuentaDestino());
 
+        // Sedebe verificar que la moneda de ambas cuentas sea la misma, y en caso de ser
+        // transferencia en pesos, el banco cobrará un cargo del 2% de la transferencia si
+        // supera $1000000 (o caso de ser dólares cobra un 0.5% si son más de U$S5000).
+
+        double monto = transferirDto.getMonto();
+
+        if (transferirDto.getMoneda() == "PESOS"){
+            if (monto > 1000000) {
+                monto = monto - (monto * 0.02);
+            }
+        } else if (transferirDto.getMoneda() == "DOLARES"){
+            if (monto > 5000) {
+                monto = monto - (monto * 0.005);
+            }
+        }
         // realizar la transferencia
-        cuentaOrigen.transferencia(cuentaDestino, transferirDto.getMonto());
+        cuentaOrigen.transferencia(cuentaDestino, monto);
 
         // guardar el moviimiento y actualizar las cuentas
         CuentaDto cuentaDtoOrigen = new CuentaDto();

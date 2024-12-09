@@ -22,7 +22,7 @@ public class CuentaValidator {
     }
 
     private void validateMoneda(String moneda) {
-        if (!"P".equalsIgnoreCase(moneda) ||!"D".equalsIgnoreCase(moneda)) throw new IllegalArgumentException("Moneda no soportada");
+        if (!"PESOS".equalsIgnoreCase(moneda) ||!"DOLARES".equalsIgnoreCase(moneda)) throw new IllegalArgumentException("Moneda no soportada");
     }
 
     public void validateTitular(Long titular) {
