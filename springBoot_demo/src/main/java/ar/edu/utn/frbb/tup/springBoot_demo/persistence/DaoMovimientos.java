@@ -9,11 +9,11 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+import org.springframework.stereotype.Repository;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Movimientos;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.DataAccessException;
-
+@Repository
 public class DaoMovimientos extends AbstractBaseDao {
     private static final String FILE_PATH_MOVIMIENTOS = "App\\src\\main\\java\\ar\\utn\\frbb\\tup\\base_datos\\Movimientos.txt";
 

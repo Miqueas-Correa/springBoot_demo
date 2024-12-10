@@ -8,10 +8,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.springframework.stereotype.Repository;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cuenta;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.DataAccessException;
-
+@Repository
 public class DaoCuenta extends AbstractBaseDao {
     private static final String FILE_PATH_CUENTAS = "App\\src\\main\\java\\ar\\utn\\frbb\\tup\\base_datos\\Cuentas.txt";
 

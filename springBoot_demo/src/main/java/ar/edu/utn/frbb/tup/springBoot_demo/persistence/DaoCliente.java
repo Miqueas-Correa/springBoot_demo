@@ -9,12 +9,12 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+import org.springframework.stereotype.Repository;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cliente;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.ClienteNotFoundException;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.DataAccessException;
-
+@Repository
 public class DaoCliente extends AbstractBaseDao {
     private static final String FILE_PATH_CLIENTES = "App\\src\\main\\java\\ar\\utn\\frbb\\tup\\base_datos\\Clientes.txt";
 

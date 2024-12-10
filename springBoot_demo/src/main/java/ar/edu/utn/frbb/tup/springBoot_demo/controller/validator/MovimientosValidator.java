@@ -1,7 +1,8 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.controller.validator;
 
+import org.springframework.stereotype.Component;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.MovimientosDto;
-
+@Component
 public class MovimientosValidator {
     public void validate(MovimientosDto movimientosDto) {
         validateNumeroCuenta(movimientosDto.getNumeroCuenta());
