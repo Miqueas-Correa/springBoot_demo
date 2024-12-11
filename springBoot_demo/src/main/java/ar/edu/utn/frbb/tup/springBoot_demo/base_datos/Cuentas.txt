@@ -1,2 +1,2 @@
-123456789;Juan Perez;true;1500.50;Ahorro;USD;2024-01-01
-987654321;Maria Lopez;false;2500.75;Corriente;EUR;2023-06-15
+123456789;Juan Perez;true;1500.50;a;USD;2024-01-01
+987654321;Maria Lopez;false;2500.75;c;EUR;2023-06-15

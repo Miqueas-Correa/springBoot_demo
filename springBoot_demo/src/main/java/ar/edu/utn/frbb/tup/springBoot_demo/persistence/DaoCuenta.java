@@ -14,7 +14,7 @@ import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.DataAccessException;
 @Repository
 public class DaoCuenta extends AbstractBaseDao {
-    private static final String FILE_PATH_CUENTAS = "App\\src\\main\\java\\ar\\utn\\frbb\\tup\\base_datos\\Cuentas.txt";
+    private static final String FILE_PATH_CUENTAS = "C:\\Users\\mikim\\OneDrive\\Escritorio\\segundo_anio\\Laboratorio3\\Trabajos\\springBoot_demo\\springBoot_demo\\src\\main\\java\\ar\\edu\\utn\\frbb\\tup\\springBoot_demo\\base_datos\\Cuentas.txt";
 
     @Override
     protected String getEntityName() {

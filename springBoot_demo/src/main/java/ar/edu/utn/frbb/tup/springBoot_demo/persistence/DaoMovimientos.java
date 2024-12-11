@@ -15,7 +15,7 @@ import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.DataAccessException;
 @Repository
 public class DaoMovimientos extends AbstractBaseDao {
-    private static final String FILE_PATH_MOVIMIENTOS = "App\\src\\main\\java\\ar\\utn\\frbb\\tup\\base_datos\\Movimientos.txt";
+    private static final String FILE_PATH_MOVIMIENTOS = "C:\\Users\\mikim\\OneDrive\\Escritorio\\segundo_anio\\Laboratorio3\\Trabajos\\springBoot_demo\\springBoot_demo\\src\\main\\java\\ar\\edu\\utn\\frbb\\tup\\springBoot_demo\\base_datos\\Movimientos.txt";
 
     @Override
     protected String getEntityName() {

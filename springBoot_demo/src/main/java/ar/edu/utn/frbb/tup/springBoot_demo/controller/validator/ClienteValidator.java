@@ -28,8 +28,7 @@ public class ClienteValidator {
     // validar telefono
     private void validateTelefono(Long telefono) {
         if (telefono == null) throw new IllegalArgumentException("El telefono no puede ser nulo");
-        if (telefono < 10000000 || telefono > 99999999) throw new IllegalArgumentException("El telefono debe tener 8 digitos");
-        if (telefono.toString().length() > 8) throw new IllegalArgumentException("El telefono debe tener 8 digitos");
+        if (telefono.toString().length() != 10) throw new IllegalArgumentException("El telefono debe tener 10 digitos");
     }
     // validar email
     private void validateEmail(String email) {
@@ -49,7 +48,6 @@ public class ClienteValidator {
     // validar dni
     private void validateDni(Long dni) throws ClienteAlreadyExistsException {
         if (String.valueOf(dni).length() != 8 || dni == null) throw new IllegalArgumentException("El DNI debe tener 8 digitos y no puede ser nulo.");
-        if (serviceCliente.buscarClientePorDni(dni) != null) throw new ClienteAlreadyExistsException("El DNI ya existe");
         if (String.valueOf(dni).charAt(0) == '0') throw new IllegalArgumentException("El DNI no puede empezar con 0");
     }
     // validar nombre

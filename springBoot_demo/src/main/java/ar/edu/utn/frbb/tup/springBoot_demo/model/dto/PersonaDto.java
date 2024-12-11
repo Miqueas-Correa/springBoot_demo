@@ -2,11 +2,14 @@ package ar.edu.utn.frbb.tup.springBoot_demo.model.dto;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class PersonaDto {
     private String nombre_y_apellido;
     private long telefono;
     private String email;
     private long dni;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaNacimiento;
 
     public String getEmail() {
