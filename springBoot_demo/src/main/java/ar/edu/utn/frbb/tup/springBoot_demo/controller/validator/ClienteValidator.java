@@ -1,20 +1,13 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.controller.validator;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.service.ServiceCliente;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.ClienteAlreadyExistsException;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.InvalidAgeException;
-
 import java.time.LocalDate;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ClienteValidator {
-    @Autowired
-    private ServiceCliente serviceCliente;
-
     public void validate(ClienteDto clienteDto) throws ClienteAlreadyExistsException, InvalidAgeException {
         validateDni(clienteDto.getDni());
         validateNombre(clienteDto.getNombre_y_apellido());
@@ -36,9 +29,8 @@ public class ClienteValidator {
         if (email.length() > 30) throw new IllegalArgumentException("El email no puede tener mas de 30 caracteres");
         if (!validarEmail(email)) throw new IllegalArgumentException("El email debe ser de esta manera: ejemplo@ejemplo.com");
     }
-    private static boolean validarEmail(String email) {
-        // Expresión regular para validar un email
-        String regex = "^[\\w-\\.]+@[\\w-]+\\.[a-z]{2,7}$";
+    private static Boolean validarEmail(String email) {
+        String regex = "^[\\w-\\.]+@[\\w-]+\\.[a-z]{2,}$";
         return email != null && email.matches(regex);
     }
     // validar banco
@@ -47,14 +39,14 @@ public class ClienteValidator {
     }
     // validar dni
     private void validateDni(Long dni) throws ClienteAlreadyExistsException {
-        if (String.valueOf(dni).length() != 8 || dni == null) throw new IllegalArgumentException("El DNI debe tener 8 digitos y no puede ser nulo.");
-        if (String.valueOf(dni).charAt(0) == '0') throw new IllegalArgumentException("El DNI no puede empezar con 0");
+        if (dni == null) throw new IllegalArgumentException("El DNI no puede ser nulo.");
+        if (String.valueOf(dni).length() != 8) throw new IllegalArgumentException("El DNI debe tener 8 dígitos.");
+        if (String.valueOf(dni).charAt(0) == '0') throw new IllegalArgumentException("El DNI no puede empezar con 0.");
     }
     // validar nombre
     private void validateNombre(String nombre_y_apellido) {
-        nombre_y_apellido = nombre_y_apellido.trim();
-        if (nombre_y_apellido == null) throw new IllegalArgumentException("El nombre y el apellido no puede ser nulo.");
-        if (nombre_y_apellido.equals("")) throw new IllegalArgumentException("El nombre y el apellido no puede estar vacío.");
+        if (nombre_y_apellido == null) throw new IllegalArgumentException("El nombre y el apellido no pueden ser nulos.");
+        if (nombre_y_apellido.trim().isEmpty()) throw new IllegalArgumentException("El nombre y el apellido no pueden estar vacíos.");
     }
     // validar fecha de nacimiento
     private void validateFechaNacimiento(LocalDate fechaNacimiento)throws InvalidAgeException {
