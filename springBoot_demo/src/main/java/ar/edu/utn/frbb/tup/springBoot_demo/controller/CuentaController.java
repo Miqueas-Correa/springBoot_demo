@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ public class CuentaController {
 
     @Autowired
     private CuentaValidator cuentaValidator;
+
     @Autowired
     private TransferirValidator transferirValidator;
 
@@ -42,7 +44,7 @@ public class CuentaController {
     }
 
     // GET /cuenta/{id}
-    @GetMapping("/{id}")
+    @GetMapping("/{numeroCuenta}")
     public ResponseEntity<Cuenta> darCliente(@PathVariable Long numeroCuenta) {
         if (cuentaService.buscarCuenta(numeroCuenta) == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404
         return new ResponseEntity<>(cuentaService.buscarCuenta(numeroCuenta), HttpStatus.OK); // 200
@@ -61,7 +63,7 @@ public class CuentaController {
 
     // PUT /cuenta/{id}
     @PutMapping("/{id}")
-    public ResponseEntity<Cuenta> modificarCliente(@RequestBody CuentaDto cuentaDto, @PathVariable Long id) {
+    public ResponseEntity<Cuenta> modificarCuenta(@RequestBody CuentaDto cuentaDto, @PathVariable Long id) {
         if (cuentaService.buscarCuenta(id) == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404
         try {
             cuentaValidator.validate(cuentaDto); // si no se lanza una excepcion, el cliente es valido
@@ -101,6 +103,18 @@ public class CuentaController {
             return cuentaService.transferir(transferirDto); // 200
         } catch (CuentaNotFoundException e) {
             return new MsjResponce("FALLIDA", "Error en la transferencia. Verifique los datos."); // 409
+        }
+    }
+
+    // DELETE /cuenta/{numeroCuenta}
+    @DeleteMapping("/{numeroCuenta}")
+    public ResponseEntity<Cuenta> borrarCuenta(@PathVariable Long numeroCuenta) {
+        if (cuentaService.buscarCuenta(numeroCuenta) == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404
+        try {
+            cuentaService.darDeBajaCuenta(numeroCuenta);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204
+        } catch (CuentaNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT); // 409
         }
     }
 }

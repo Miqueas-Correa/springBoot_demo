@@ -117,4 +117,41 @@ public class CuentaControllerTest {
         assertEquals("FALLIDA", response.getEstado());
         assertEquals("Error en la transferencia. Verifique los datos.", response.getMensaje());
     }
+
+    @Test
+    void borrarCuenta_WhenCuentaExists_ReturnsNoContent() throws CuentaNotFoundException {
+        Long numeroCuenta = 1L;
+        Cuenta cuenta = new Cuenta();
+        when(cuentaService.buscarCuenta(numeroCuenta)).thenReturn(cuenta);
+        doNothing().when(cuentaService).darDeBajaCuenta(numeroCuenta);
+
+        ResponseEntity<Cuenta> response = cuentaController.borrarCuenta(numeroCuenta);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(cuentaService).darDeBajaCuenta(numeroCuenta);
+    }
+
+    @Test
+    void borrarCuenta_WhenCuentaNotFound_ReturnsNotFound() {
+        Long numeroCuenta = 1L;
+        when(cuentaService.buscarCuenta(numeroCuenta)).thenReturn(null);
+
+        ResponseEntity<Cuenta> response = cuentaController.borrarCuenta(numeroCuenta);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        verify(cuentaService, never()).darDeBajaCuenta(any());
+    }
+
+    @Test
+    void borrarCuenta_WhenServiceThrowsException_ReturnsConflict() throws CuentaNotFoundException {
+        Long numeroCuenta = 1L;
+        Cuenta cuenta = new Cuenta();
+        when(cuentaService.buscarCuenta(numeroCuenta)).thenReturn(cuenta);
+        doThrow(new CuentaNotFoundException("Test de cuenta not found")).when(cuentaService).darDeBajaCuenta(numeroCuenta);
+
+        ResponseEntity<Cuenta> response = cuentaController.borrarCuenta(numeroCuenta);
+
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        verify(cuentaService).darDeBajaCuenta(numeroCuenta);
+    }
 }
