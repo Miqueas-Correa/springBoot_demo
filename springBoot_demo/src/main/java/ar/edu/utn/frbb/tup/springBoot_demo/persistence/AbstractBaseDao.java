@@ -20,18 +20,22 @@ public abstract class AbstractBaseDao {
     // ! IMPORTANTE: este método es para usarlo en el DAO de Cuenta y Movimiento.
     protected static long generateId(String FILE_PATH) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(FILE_PATH));
-
-        if (lines.isEmpty()) throw new IOException("El archivo está vacío.");
-
-        // Obtener la primera línea y dividirla en partes
-        String[] parts = lines.get(0).split(";");
-        if (parts.length == 0) throw new IOException("Formato de archivo incorrecto: no se encontró el ID.");
-        // Leer y retornar el ID incrementado sin escribir en el archivo
-        try {
-            long currentId = Long.parseLong(parts[0].trim());
-            return currentId + 1;
-        } catch (NumberFormatException e) {
-            throw new IOException("El ID en el archivo no es un número válido.", e);
+        if (lines.isEmpty()) return 1L;
+        long maxId = 0;
+        for (String line : lines) {
+            String[] parts = line.split(";");
+            if (parts.length == 0) {
+                throw new IOException("Formato de archivo incorrecto: no se encontró el ID.");
+            }
+            try {
+                long currentId = Long.parseLong(parts[0].trim());
+                if (currentId > maxId) {
+                    maxId = currentId;
+                }
+            } catch (NumberFormatException e) {
+                throw new IOException("El ID en el archivo no es un número válido.", e);
+            }
         }
+        return maxId + 1;
     }
 }

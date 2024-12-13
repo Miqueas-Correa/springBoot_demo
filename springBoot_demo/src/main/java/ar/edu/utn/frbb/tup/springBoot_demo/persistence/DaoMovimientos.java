@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,15 +40,12 @@ public class DaoMovimientos extends AbstractBaseDao {
     // parseo los movimientos
     private Movimientos parseMovimientos(String data) throws IOException {
         String[] parts = data.split(";");
-
-        // Verificar la cantidad esperada de partes
-        if (parts.length != 6) throw new IOException("Error en el formato del archivo: se esperaban " + 6 + " partes.");
-
+        if (parts.length != 4) throw new IOException("Error en el formato del archivo: se esperaban " + 4 + " partes.");
         try {
             Movimientos movimiento = new Movimientos();
             movimiento.setId(Long.parseLong(parts[0]));
             movimiento.setNumeroCuenta(Long.parseLong(parts[1]));
-            movimiento.setFecha_y_hs(LocalDateTime.parse(parts[2]));
+            movimiento.setFecha_y_hs(LocalDate.parse(parts[2]));
             movimiento.setDescripcion(parts[3]);
             // parsear los movimientos correspondientes a la cuenta del cliente
             return movimiento;
@@ -80,10 +77,10 @@ public class DaoMovimientos extends AbstractBaseDao {
                 if (movimiento != null && movimiento.getNumeroCuenta().equals(numeroCuenta)) {
                     movimientos.add(movimiento);
                 }
-                return movimientos;
             }
-            return Collections.emptyList();
-        }catch (IOException e) {
+            return movimientos;
+        } catch (IOException e) {
+            System.err.println("Error al leer el archivo de movimientos: " + e.getMessage());
             return Collections.emptyList();
         }
     }

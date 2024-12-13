@@ -1,13 +1,12 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.model;
 
-import java.time.LocalDateTime;
-
+import java.time.LocalDate;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.MovimientosDto;
 
 public class Movimientos {
     private Long id;
     private String descripcion;
-    private LocalDateTime fecha_y_hs;
+    private LocalDate fecha_y_hs;
     private Long numeroCuenta;
 
     // constructor
@@ -15,7 +14,7 @@ public class Movimientos {
     public Movimientos(MovimientosDto movimientosDto){
         this.descripcion = movimientosDto.getDescripcion();
         this.numeroCuenta = movimientosDto.getNumeroCuenta();
-        this.fecha_y_hs = LocalDateTime.now();
+        this.fecha_y_hs = LocalDate.now();
     }
 
     // getters and setters
@@ -31,10 +30,10 @@ public class Movimientos {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    public LocalDateTime getFecha_y_hs() {
+    public LocalDate getFecha_y_hs() {
         return this.fecha_y_hs;
     }
-    public void setFecha_y_hs(LocalDateTime fecha) {
+    public void setFecha_y_hs(LocalDate fecha) {
         this.fecha_y_hs = fecha;
     }
     public Long getNumeroCuenta() {

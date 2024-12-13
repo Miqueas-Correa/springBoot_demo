@@ -59,6 +59,13 @@ public class ServiceCuenta {
         cuentaDto.setSaldo(cuenta.getSaldo());
 
         daoCuenta.update(cuentaDto, cuenta.getNumeroCuenta());
+        // crear el movimiento
+        MovimientosDto movimientoDto1 = new MovimientosDto();
+
+        movimientoDto1.setNumeroCuenta(cuenta.getNumeroCuenta());
+        movimientoDto1.setDescripcion("Deposito : - Monto: " + monto + "$ " + cuenta.getMoneda());
+
+        daoMovimientos.save(movimientoDto1);
 
         return new MsjResponce("EXITOSA", "Se depositó el dinero a la cuenta.");
     }
@@ -80,6 +87,13 @@ public class ServiceCuenta {
         cuentaDto.setEstaA(cuenta.getEstaA());
         cuentaDto.setSaldo(cuenta.getSaldo());
         daoCuenta.update(cuentaDto, cuenta.getNumeroCuenta());
+        // crear el movimiento
+        MovimientosDto movimientoDto1 = new MovimientosDto();
+
+        movimientoDto1.setNumeroCuenta(cuenta.getNumeroCuenta());
+        movimientoDto1.setDescripcion("Retiro : - Monto: " + monto + "$ " + cuenta.getMoneda());
+
+        daoMovimientos.save(movimientoDto1);
 
         return new MsjResponce("EXITOSA", "Se retiró el dinero de la cuenta.");
     }
@@ -129,9 +143,9 @@ public class ServiceCuenta {
         MovimientosDto movimientoDto2 = new MovimientosDto();
 
         movimientoDto1.setNumeroCuenta(cuentaOrigen.getNumeroCuenta());
-        movimientoDto1.setDescripcion("Transferencia a: " + cuentaDestino.getNumeroCuenta() + " - Monto: " + transferirDto.getMonto() + "$" + transferirDto.getMoneda());
+        movimientoDto1.setDescripcion("Transferencia a: " + cuentaDestino.getNumeroCuenta() + " - Monto: " + transferirDto.getMonto() + "$ " + transferirDto.getMoneda());
         movimientoDto2.setNumeroCuenta(cuentaDestino.getNumeroCuenta());
-        movimientoDto2.setDescripcion("Transferencia de: " + cuentaOrigen.getNumeroCuenta() + " - Monto: " + transferirDto.getMonto() + "$" + transferirDto.getMoneda());
+        movimientoDto2.setDescripcion("Transferencia de: " + cuentaOrigen.getNumeroCuenta() + " - Monto: " + transferirDto.getMonto() + "$ " + transferirDto.getMoneda());
 
         daoMovimientos.save(movimientoDto1);
         daoMovimientos.save(movimientoDto2);
