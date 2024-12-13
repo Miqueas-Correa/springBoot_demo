@@ -16,7 +16,9 @@ public class TransferirValidator {
         if (serviceCuenta.buscarCuenta(transferirDto.getCuentaDestino()) == null) throw new IllegalArgumentException("La cuenta de destino no existe.");
         validateSaldo(transferirDto.getCuentaOrigen(), transferirDto.getMonto());
         validateActiva(transferirDto.getCuentaOrigen(), transferirDto.getCuentaDestino());
-        validateMoneda(transferirDto.getCuentaOrigen(), transferirDto.getCuentaDestino());
+        validateMoneda(serviceCuenta.buscarCuenta(transferirDto.getCuentaOrigen()).getMoneda(),
+        serviceCuenta.buscarCuenta(transferirDto.getCuentaDestino()).getMoneda(),
+        transferirDto.getMoneda());
     }
 
     private void validateSaldo(Long cuentaOrigen, double monto){
@@ -28,7 +30,7 @@ public class TransferirValidator {
         if (!serviceCuenta.buscarCuenta(cuentaOrigen).getEstaA() || !serviceCuenta.buscarCuenta(cuentaDestino).getEstaA()) throw new IllegalArgumentException("Ambas cuentas deben estar activas.");
     }
 
-    private void validateMoneda(Long cuentaOrigen, Long cuentaDestino){
-        if (serviceCuenta.buscarCuenta(cuentaOrigen).getMoneda() != serviceCuenta.buscarCuenta(cuentaDestino).getMoneda()) throw new IllegalArgumentException("Las cuentas deben tener la misma moneda.");
+    private void validateMoneda(String cuentaOrigenM, String cuentaDestinoM, String moneda){
+        if (!cuentaOrigenM.equals(cuentaOrigenM) && !cuentaOrigenM.equals(moneda)) throw new IllegalArgumentException("Las cuentas deben tener la misma moneda, junto con la moneda de la operacion.");
     }
 }

@@ -45,8 +45,8 @@ public class ServiceCuenta {
 
     // metodo para depositar
     public MsjResponce depositar(Cuenta cuenta, Double monto){
-        if (!cuenta.getEstaA()) throw new IllegalArgumentException("La cuenta debe estar activa.");
-        if (monto < 0) throw new IllegalArgumentException("No puede ingresar un monto menor a 0.");
+        if (!cuenta.getEstaA()) return new MsjResponce("FALLIDA.","La cuenta debe estar activa.");
+        if (monto < 0) return new MsjResponce("FALLIDA.","No puede ingresar un monto menor a 0.");
 
         cuenta.depositar(monto);
 
@@ -65,10 +65,10 @@ public class ServiceCuenta {
 
     // metodo para retirar
     public MsjResponce retirar(Cuenta cuenta, Double monto){
-        if (!cuenta.getEstaA()) throw new IllegalArgumentException("La cuenta debe estar activa.");
-        if (monto < 0) throw new IllegalArgumentException("No puede retirar un monto menor a 0.");
-        if (cuenta.getSaldo() < monto) throw new IllegalArgumentException("No tiene saldo suficiente.");
-        if (cuenta.getTipoCuenta().equals("CAJA DE AHORRO")) throw new IllegalArgumentException("No se puede retirar de una caja de ahorro.");
+        if (!cuenta.getEstaA()) return new MsjResponce("FALLIDA.","La cuenta debe estar activa.");
+        if (monto < 0) return new MsjResponce("FALLIDA.","No puede retirar un monto menor a 0.");
+        if (cuenta.getSaldo() < monto) return new MsjResponce("FALLIDA.","No tiene saldo suficiente.");
+        if (cuenta.getTipoCuenta().equals("CAJA DE AHORRO")) return new MsjResponce("FALLIDA.","No se puede retirar de una caja de ahorro.");
 
         cuenta.retirar(monto);
 
@@ -95,11 +95,11 @@ public class ServiceCuenta {
 
         Double monto = transferirDto.getMonto();
 
-        if (transferirDto.getMoneda() == "PESOS"){
+        if (transferirDto.getMoneda() == "pesos"){
             if (monto > 1000000) {
                 monto = monto - (monto * 0.02);
             }
-        } else if (transferirDto.getMoneda() == "DOLARES"){
+        } else if (transferirDto.getMoneda() == "dolares"){
             if (monto > 5000) {
                 monto = monto - (monto * 0.005);
             }

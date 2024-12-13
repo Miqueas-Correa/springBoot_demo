@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cuenta;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.MsjResponce;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.TransferirDto;
@@ -66,9 +67,9 @@ public class ServiceCuentaTest {
     @Test
     void testDepositarCuentaInactiva() {
         cuenta.setEstaA(false);
-
-        assertThrows(IllegalArgumentException.class, () ->
-            serviceCuenta.depositar(cuenta, 500.0));
+        MsjResponce resultado = serviceCuenta.depositar(cuenta, 500.0);
+        assertEquals("FALLIDA.", resultado.getEstado());
+        assertEquals("La cuenta debe estar activa.", resultado.getMensaje());
     }
 
     @Test
@@ -126,16 +127,21 @@ public class ServiceCuentaTest {
 
     @Test
     void testRetirarMontoMayorAlSaldo() {
-        assertThrows(IllegalArgumentException.class, () ->
-            serviceCuenta.retirar(cuenta, 2000.0));
+        cuenta.setEstaA(true);
+        cuenta.setSaldo(1000.0);
+        MsjResponce resultado = serviceCuenta.retirar(cuenta, 2000.0);
+        assertEquals("FALLIDA.", resultado.getEstado());
+        assertEquals("No tiene saldo suficiente.", resultado.getMensaje());
     }
 
     @Test
     void testRetirarDeCajaAhorro() {
+        cuenta.setEstaA(true);
+        cuenta.setSaldo(1000.0);
         cuenta.setTipoCuenta("CAJA DE AHORRO");
-
-        assertThrows(IllegalArgumentException.class, () ->
-            serviceCuenta.retirar(cuenta, 500.0));
+        MsjResponce resultado = serviceCuenta.retirar(cuenta, 500.0);
+        assertEquals("FALLIDA.", resultado.getEstado());
+        assertEquals("No se puede retirar de una caja de ahorro.", resultado.getMensaje());
     }
 
     @Test
@@ -221,14 +227,19 @@ public class ServiceCuentaTest {
 
     @Test
     void testDepositarMontoNegativo() {
-        assertThrows(IllegalArgumentException.class, () ->
-            serviceCuenta.depositar(cuenta, -100.0));
+        cuenta.setEstaA(true);
+        MsjResponce resultado = serviceCuenta.depositar(cuenta, -100.0);
+        assertEquals("FALLIDA.", resultado.getEstado());
+        assertEquals("No puede ingresar un monto menor a 0.", resultado.getMensaje());
     }
 
     @Test
     void testRetirarMontoNegativo() {
-        assertThrows(IllegalArgumentException.class, () ->
-            serviceCuenta.retirar(cuenta, -100.0));
+        cuenta.setEstaA(true);
+        cuenta.setSaldo(1000.0);
+        MsjResponce resultado = serviceCuenta.retirar(cuenta, -100.0);
+        assertEquals("FALLIDA.", resultado.getEstado());
+        assertEquals("No puede retirar un monto menor a 0.", resultado.getMensaje());
     }
 
     @Test
