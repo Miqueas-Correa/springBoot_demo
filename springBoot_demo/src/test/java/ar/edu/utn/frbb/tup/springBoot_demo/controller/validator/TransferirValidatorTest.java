@@ -138,20 +138,24 @@ public class TransferirValidatorTest {
         dto.setMonto(100.0);
         dto.setCuentaOrigen(1L);
         dto.setCuentaDestino(2L);
+        dto.setMoneda("USD");  // Asegúrate de que la moneda esté configurada correctamente en el DTO
 
         Cuenta cuentaOrigen = new Cuenta();
         cuentaOrigen.setSaldo(200.0);
         cuentaOrigen.setEstaA(true);
         cuentaOrigen.setMoneda("USD");
-        
+
         Cuenta cuentaDestino = new Cuenta();
+        cuentaDestino.setSaldo(100.0);
         cuentaDestino.setEstaA(true);
         cuentaDestino.setMoneda("ARS");
 
+        // Mock de las cuentas
         when(serviceCuenta.buscarCuenta(1L)).thenReturn(cuentaOrigen);
         when(serviceCuenta.buscarCuenta(2L)).thenReturn(cuentaDestino);
 
+        // Verifica que la excepción se lance correctamente
         assertThrows(IllegalArgumentException.class, () -> transferirValidator.validate(dto),
-                "Las cuentas deben tener la misma moneda.");
+                "Las cuentas deben tener la misma moneda, junto con la moneda de la operacion.");
     }
 }
