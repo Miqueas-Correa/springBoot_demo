@@ -1,40 +1,49 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.model;
-import java.time.LocalDateTime;
-
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.CuentaDto;
-import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.InactiveAccountException;
-import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.InsufficientFundsException;
+import java.time.LocalDate;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.CuentaDto;
 
 public class Cuenta {
-    private boolean estaA;
-    private Long titular;
-    private double saldo;
     private Long numeroCuenta;
+    private Boolean estaA;
+    private Long titular;
+    private Double saldo;
     private String tipoCuenta;
     private String moneda;
-    private LocalDateTime fechaCreacion;
+    private LocalDate fechaCreacion;
 
     // constructor
+    public Cuenta(){}
     public Cuenta(CuentaDto cuentaDto){
         this.estaA = true;
         this.titular = cuentaDto.getTitular();
         this.saldo = cuentaDto.getSaldo();
         this.tipoCuenta = cuentaDto.getTipoCuenta();
         this.moneda = cuentaDto.getMoneda();
-        this.fechaCreacion = cuentaDto.getFechaCreacion();
+        this.fechaCreacion = LocalDate.now();
     }
 
     // metodo toString
     @Override
     public String toString(){
-        return this.titular.toString() + ";" + this.estaA + ";" + this.saldo + ";" + this.numeroCuenta.toString() + ";" + this.tipoCuenta + ";" + this.moneda.toString() + ";" + this.fechaCreacion.toString();
+        return this.numeroCuenta.toString() + ";" + this.titular.toString() + ";" + this.estaA + ";" + this.saldo + ";" + this.tipoCuenta + ";" + this.moneda.toString() + ";" + this.fechaCreacion.toString();
+    }
+    // metodo transferencia
+    public void transferencia(Cuenta cuentaDestino, Double monto){
+        this.saldo -= monto;
+        cuentaDestino.saldo += monto;
+    }
+    public void depositar(Double monto){
+        this.saldo += monto;
+    }
+    public void retirar(Double monto){
+        this.saldo -= monto;
     }
 
     // Getters y Setters
-    public boolean getEstaA() {
+    public Boolean getEstaA() {
         return this.estaA;
     }
-    public void setEstaA(boolean estaA) {
+    public void setEstaA(Boolean estaA) {
         this.estaA = estaA;
     }
     public Long getTitular() {
@@ -43,10 +52,10 @@ public class Cuenta {
     public void setTitular(Long id){
         this.titular = id;
     }
-    public double getSaldo() {
+    public Double getSaldo() {
         return this.saldo;
     }
-    public void setSaldo(double saldo) {
+    public void setSaldo(Double saldo) {
         this.saldo = saldo;
     }
     public Long getNumeroCuenta() {
@@ -67,22 +76,10 @@ public class Cuenta {
     public void setMoneda(String moneda) {
         this.moneda = moneda;
     }
-    public LocalDateTime getFechaCreacion() {
+    public LocalDate getFechaCreacion() {
         return this.fechaCreacion;
     }
-    public void setFechaCreacion(LocalDateTime fecha_de_apertura) {
-        this.fechaCreacion = fecha_de_apertura;
-    }
-
-
-    // Métodos
-    public void deposito(double efectivo) throws InactiveAccountException{
-        if (!this.estaA) throw new InactiveAccountException("La cuenta esta inactiva.");
-        this.saldo += efectivo;
-    }
-    public void retiro(double efectivo) throws InactiveAccountException, InsufficientFundsException{
-        if (!this.estaA) throw new InactiveAccountException("La cuenta esta inactiva.");
-        if(this.saldo >= efectivo) throw new InsufficientFundsException("No hay saldo suficiente.");
-        this.saldo =- efectivo;
+    public void setFechaCreacion(LocalDate fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 }

@@ -1,39 +1,40 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.model;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.MovimientosDto;
 
 public class Movimientos {
     private Long id;
     private String descripcion;
-    private LocalDate fecha;
-    private LocalTime hora;
+    private LocalDate fecha_y_hs;
     private Long numeroCuenta;
+
+    // constructor
+    public Movimientos(){}
+    public Movimientos(MovimientosDto movimientosDto){
+        this.descripcion = movimientosDto.getDescripcion();
+        this.numeroCuenta = movimientosDto.getNumeroCuenta();
+        this.fecha_y_hs = LocalDate.now();
+    }
 
     // getters and setters
     public Long getId() {
-        return id;
+        return this.id;
     }
     public void setId(Long id) {
         this.id = id;
     }
     public String getDescripcion() {
-        return descripcion;
+        return this.descripcion;
     }
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    public LocalDate getFecha() {
-        return fecha;
+    public LocalDate getFecha_y_hs() {
+        return this.fecha_y_hs;
     }
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
-    public LocalTime getHora() {
-        return hora;
-    }
-    public void setHora(LocalTime hora) {
-        this.hora = hora;
+    public void setFecha_y_hs(LocalDate fecha) {
+        this.fecha_y_hs = fecha;
     }
     public Long getNumeroCuenta() {
         return numeroCuenta;
@@ -42,16 +43,9 @@ public class Movimientos {
         this.numeroCuenta = numeroCuenta;
     }
 
-    // metodos
-    public void setMovimiento(String descripcion, Long numeroCuenta) {
-        this.descripcion = descripcion;
-        this.fecha = LocalDate.now();
-        this.hora = LocalTime.now();
-        this.numeroCuenta = numeroCuenta;
-    }
     // retornar movimiento
     @Override
     public String toString() {
-        return this.id + ";" + this.numeroCuenta + ";" + this.fecha + ";" + this.hora + ";" + this.descripcion;
+        return this.id + ";" + this.numeroCuenta + ";" + this.fecha_y_hs + ";" + this.descripcion;
     }
 }

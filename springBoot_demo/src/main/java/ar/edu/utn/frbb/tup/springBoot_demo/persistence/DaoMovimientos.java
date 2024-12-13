@@ -5,19 +5,17 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.Cuenta;
-import ar.edu.utn.frbb.tup.springBoot_demo.model.Cliente;
+import org.springframework.stereotype.Repository;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Movimientos;
-import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.ClienteNotFoundException;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.DataAccessException;
-
+@Repository
 public class DaoMovimientos extends AbstractBaseDao {
-    private static final String FILE_PATH_MOVIMIENTOS = "App\\src\\main\\java\\ar\\utn\\frbb\\tup\\base_datos\\Movimientos.txt";
+    private static final String FILE_PATH_MOVIMIENTOS = "C:\\Users\\mikim\\OneDrive\\Escritorio\\segundo_anio\\Laboratorio3\\Trabajos\\springBoot_demo\\springBoot_demo\\src\\main\\java\\ar\\edu\\utn\\frbb\\tup\\springBoot_demo\\base_datos\\Movimientos.txt";
 
     @Override
     protected String getEntityName() {
@@ -25,7 +23,7 @@ public class DaoMovimientos extends AbstractBaseDao {
     }
 
     // listar todos los movimientos
-    public List<Movimientos> listarMovimientos() {
+    public List<Movimientos> darMovimientos() {
         try {
             List<String> lines = Files.readAllLines(Paths.get(FILE_PATH_MOVIMIENTOS));
             List<Movimientos> movimientos = new ArrayList<>();
@@ -41,66 +39,49 @@ public class DaoMovimientos extends AbstractBaseDao {
 
     // parseo los movimientos
     private Movimientos parseMovimientos(String data) throws IOException {
+        String[] parts = data.split(";");
+        if (parts.length != 4) throw new IOException("Error en el formato del archivo: se esperaban " + 4 + " partes.");
         try {
-            String[] parts = data.split(";");
-            // hago saltar la excepcion si las partes no son 6
-            if (parts.length!= 6) throw new IOException("Error en el formato del archivo");
-            if (parts.length == 6) {
-                Movimientos movimiento = new Movimientos();
-                movimiento.setNumeroCuenta(Long.parseLong(parts[0]));
-                movimiento.setFecha(LocalDate.parse(parts[1]));
-                movimiento.setHora(LocalTime.parse(parts[3]));
-                movimiento.setDescripcion(parts[4]);
-                if (movimiento != null) {
-                    // parsear los movimientos correspondientes a la cuenta del cliente
-                    return movimiento;
-                }
-            }
-            return null;
-        } catch (IOException e) {
-            throw new DataAccessException("Error en el formato del archivo", e);
+            Movimientos movimiento = new Movimientos();
+            movimiento.setId(Long.parseLong(parts[0]));
+            movimiento.setNumeroCuenta(Long.parseLong(parts[1]));
+            movimiento.setFecha_y_hs(LocalDate.parse(parts[2]));
+            movimiento.setDescripcion(parts[3]);
+            // parsear los movimientos correspondientes a la cuenta del cliente
+            return movimiento;
+        } catch (NumberFormatException | DateTimeParseException e) {
+            throw new DataAccessException("Error al parsear los datos del movimiento", e);
         }
-    }
-
-    // modificar el moviimiento
-    public Movimientos updateCliente(Movimientos clienteDto, long id) {
-        try {
-            // Leer todas las líneas del archivo
-            List<String> lineas = Files.readAllLines(Paths.get(FILE_PATH_MOVIMIENTOS));
-
-            // Buscar y modificar la línea que corresponde al cliente
-            for (int i = 0; i < lineas.size(); i++) {
-                if (lineas.get(i).startsWith(String.valueOf(id))) {
-                    Movimientos movimientos = buscarMovimientoPorId(id); // no valido que no sea nulo xq se valida antes
-                    // considero que solo estos datos pueden ser modificados
-                    movimientos.setNombre_y_apellido(clienteDto.getNombre_y_apellido());
-                    movimientos.setBanco(clienteDto.getBanco());
-                    movimientos.setEmail(clienteDto.getEmail());
-                    movimientos.setTelefono(clienteDto.getTelefono());
-                    // Crear la nueva línea con los datos actualizados del cliente
-                    String updatedClienteData = movimientos.toString();
-                    // Actualizar la línea en la lista
-                    lineas.set(i, updatedClienteData);
-                    // devuelve el cliente actualizado
-                    return movimientos;
-                }
-            }
-            // Sobrescribir el archivo con las líneas actualizadas
-            Files.write(Paths.get(FILE_PATH_CLIENTES), lineas);
-        } catch (IOException e) {
-            throw new DataAccessException("No se pudo actualizar el cliente", e);
-        }
-        // excepcion si no se encuentra el cliente
-        throw new ClienteNotFoundException("Cliente con DNI " + id + " no encontrado");
     }
 
     // parseo el archivo y lo guardo en un banco
-    public void save(Cliente cliente) {
+    public void save(MovimientosDto movimientosDto) {
         try {
+            Movimientos movimientos = new Movimientos(movimientosDto);
+            // genero el id al movimiento
+            movimientos.setId(generateId(FILE_PATH_MOVIMIENTOS));
             // guardar el cliente en el archivo
-            Files.write(Paths.get(FILE_PATH_CLIENTES), Collections.singletonList(cliente.toString()), StandardOpenOption.APPEND);
+            Files.write(Paths.get(FILE_PATH_MOVIMIENTOS), Collections.singletonList(movimientos.toString()), StandardOpenOption.APPEND);
         } catch (IOException e) {
-            throw new DataAccessException("No se pudo guardar el cliente", e);
+            throw new DataAccessException("No se pudo guardar el movimiento", e);
+        }
+    }
+
+    // buscar movimientos por cuenta asociada (numeroCuenta)
+    public List<Movimientos> buscar(Long numeroCuenta) {
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(FILE_PATH_MOVIMIENTOS));
+            List<Movimientos> movimientos = new ArrayList<>();
+            for (String line : lines) {
+                Movimientos movimiento = parseMovimientos(line);
+                if (movimiento != null && movimiento.getNumeroCuenta().equals(numeroCuenta)) {
+                    movimientos.add(movimiento);
+                }
+            }
+            return movimientos;
+        } catch (IOException e) {
+            System.err.println("Error al leer el archivo de movimientos: " + e.getMessage());
+            return Collections.emptyList();
         }
     }
 }

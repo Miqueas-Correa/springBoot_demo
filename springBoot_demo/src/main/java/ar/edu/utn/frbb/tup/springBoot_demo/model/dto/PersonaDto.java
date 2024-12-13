@@ -1,12 +1,15 @@
-package ar.edu.utn.frbb.tup.springBoot_demo.controller.dto;
+package ar.edu.utn.frbb.tup.springBoot_demo.model.dto;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class PersonaDto {
     private String nombre_y_apellido;
-    private long telefono;
+    private Long telefono;
     private String email;
-    private long dni;
+    private Long dni;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaNacimiento;
 
     public String getEmail() {
@@ -17,11 +20,11 @@ public class PersonaDto {
         this.email = email;
     }
 
-    public long getTelefono() {
+    public Long getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(long telefono) {
+    public void setTelefono(Long telefono) {
         this.telefono = telefono;
     }
 
@@ -33,11 +36,11 @@ public class PersonaDto {
         this.nombre_y_apellido = nombre_y_apellido;
     }
 
-    public long getDni() {
+    public Long getDni() {
         return dni;
     }
 
-    public void setDni(long dni) {
+    public void setDni(Long dni) {
         this.dni = dni;
     }
 

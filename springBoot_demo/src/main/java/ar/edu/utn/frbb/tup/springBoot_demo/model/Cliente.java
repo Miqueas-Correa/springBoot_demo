@@ -2,7 +2,7 @@ package ar.edu.utn.frbb.tup.springBoot_demo.model;
 
 import java.time.LocalDate;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.ClienteDto;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.ClienteDto;
 
 public class Cliente extends Persona {
     // Atributos
@@ -10,17 +10,12 @@ public class Cliente extends Persona {
     private LocalDate fecha_de_alta;
 
     // constructor
-    public Cliente(String nombre_y_apellido, long telefono, String email, LocalDate fecha_de_nacimiento, Long dni, String banco, LocalDate fecha_de_alta){
-        super(nombre_y_apellido, telefono, email, fecha_de_nacimiento, dni);
-        this.banco = banco;
-        this.fecha_de_alta = LocalDate.now();
-    }
     public Cliente(ClienteDto clienteDto) {
         super(clienteDto.getNombre_y_apellido(), clienteDto.getTelefono(), clienteDto.getEmail(), clienteDto.getFechaNacimiento(), clienteDto.getDni());
         fecha_de_alta = LocalDate.now();
         banco = clienteDto.getBanco();
     }
-    public Cliente(){super();}
+    public Cliente() {super();}
 
     // Getters y Setters
     public String getBanco() {
@@ -39,6 +34,6 @@ public class Cliente extends Persona {
     // Método para parsear el clienete al archivo
     @Override
     public String toString() {
-        return this.getNombre_y_apellido().toString() + ";" + this.getTelefono().toString() + ";" + this.getEmail().toString() + ";" + this.getFecha_de_nacimiento().toString() + ";" + this.getDni().toString() + ";" + this.banco + ";" + this.fecha_de_alta.toString();
+        return this.getDni().toString() + ";" + this.getNombre_y_apellido().toString() + ";" + this.getTelefono().toString() + ";" + this.getEmail().toString() + ";" + this.getFecha_de_nacimiento().toString() + ";" + this.banco + ";" + this.fecha_de_alta.toString();
     }
 }

@@ -1,0 +1,7 @@
+12345678;Juan Perez;1234567890;juan.perez@example.com;1990-05-15;nacion;2024-01-01
+87654321;Maria Lopez;0987654321;maria.lopez@example.com;1985-10-20;provincia;2023-06-15
+46093693;Miqueas Correa;12345678;miki.mate.tizi@gmail.com;2004-08-09;nacion;2024-12-10
+45093690;Mateo Correa;2914439255;mateo@gmail.com;2000-08-09;nacion;2024-12-10
+45094490;Jime Surop;2914439242;jime@gmail.com;2000-08-09;nacion;2024-12-10
+12345679;Juan Perez Test edit;1234567890;juan.perez@example.com;1990-05-15;nacion;2024-12-13
+

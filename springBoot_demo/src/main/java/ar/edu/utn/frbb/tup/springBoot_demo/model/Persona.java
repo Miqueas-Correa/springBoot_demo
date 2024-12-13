@@ -1,14 +1,13 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.model;
 import java.time.LocalDate;
-import java.time.Period;
 
 public class Persona {
     // Atributos
+    private long dni;
     private String nombre_y_apellido;
     private long telefono;
     private String email;
     private LocalDate fecha_de_nacimiento;
-    private long dni;
 
     // constructor
     public Persona(String nombre_y_apellido, long telefono, String email, LocalDate fecha_de_nacimiento, Long dni){
@@ -52,22 +51,9 @@ public class Persona {
         this.dni = dni;
     }
 
-    // Métodos
-    public void getDatosCliente(){
-        System.out.println("------------------------");
-        System.out.println("DATOS DEL CLIENTE");
-        System.out.println("Nombre y apellido: " + this.nombre_y_apellido);
-        System.out.println("Telefono: " + this.telefono);
-        System.out.println("Email: " + this.email);
-        System.out.println("Fecha de nacimiento: " + this.fecha_de_nacimiento);
-        System.out.println("DNI: "+ this.dni);
-        System.out.println("---------------------------");
-    }
-
-    // metodo para calcular la edad
-    public int getEdad() {
+    // Método para calcular la edad
+    public int getEdad(){
         LocalDate fechaActual = LocalDate.now();
-        Period periodo = Period.between(this.fecha_de_nacimiento, fechaActual);
-        return periodo.getYears();
+        return fechaActual.getYear() - this.fecha_de_nacimiento.getYear();
     }
 }

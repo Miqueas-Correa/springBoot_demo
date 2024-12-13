@@ -4,19 +4,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.dto.CuentaDto;
-import ar.edu.utn.frbb.tup.springBoot_demo.model.Cliente;
+import org.springframework.stereotype.Repository;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cuenta;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.CuentaDto;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.CuentaNotFoundException;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.DataAccessException;
-
+@Repository
 public class DaoCuenta extends AbstractBaseDao {
-    private static final String FILE_PATH_CUENTAS = "App\\src\\main\\java\\ar\\utn\\frbb\\tup\\base_datos\\Cuentas.txt";
+    private static final String FILE_PATH_CUENTAS = "C:\\Users\\mikim\\OneDrive\\Escritorio\\segundo_anio\\Laboratorio3\\Trabajos\\springBoot_demo\\springBoot_demo\\src\\main\\java\\ar\\edu\\utn\\frbb\\tup\\springBoot_demo\\base_datos\\Cuentas.txt";
 
     @Override
     protected String getEntityName() {
@@ -30,7 +30,7 @@ public class DaoCuenta extends AbstractBaseDao {
             List<Cuenta> cuentas = new ArrayList<>();
             for (String line : lines) {
                 Cuenta cuenta = parseCuenta(line);
-                if (cuenta!= null) cuentas.add(cuenta);
+                cuentas.add(cuenta);
             }
             return cuentas;
         } catch (IOException e) {
@@ -71,31 +71,37 @@ public class DaoCuenta extends AbstractBaseDao {
         }
         return cuentasFiltradas == null ? Collections.emptyList() : cuentasFiltradas;
     }
+
     // actualizo la cuenta
-    public void updateCuenta(CuentaDto cuentaDto, long titular) {
+    public Cuenta update(CuentaDto cuentaDto, long numeroCuenta) {
         try {
             // Leer todas las líneas del archivo
             List<String> lineas = Files.readAllLines(Paths.get(FILE_PATH_CUENTAS));
+            boolean cuentaActualizada = false;
 
             // Buscar y modificar la línea que corresponde a la cuenta del cliente
             for (int i = 0; i < lineas.size(); i++) {
-                if (lineas.get(i).startsWith(String.valueOf(titular))) {
-                    Cuenta cuenta = buscarCuentaPorTitular(titular); // no valido que no sea nulo xq se valida antes
-                    // considero que solo estos datos pueden ser modificados
+                if (lineas.get(i).startsWith(String.valueOf(numeroCuenta))) {
+                    Cuenta cuenta = buscarCuenta(numeroCuenta);
+                    // Considero que solo estos datos pueden ser modificados
                     cuenta.setEstaA(cuentaDto.getEstaA());
                     cuenta.setSaldo(cuentaDto.getSaldo());
                     cuenta.setTipoCuenta(cuentaDto.getTipoCuenta());
                     cuenta.setMoneda(cuentaDto.getMoneda());
-                    cuenta.setMovimientos(cuentaDto.getMovimientos());
+
                     // Crear la nueva línea con los datos actualizados
                     String updatedCuentaData = cuenta.toString();
                     // Actualizar la línea en la lista
                     lineas.set(i, updatedCuentaData);
+                    cuentaActualizada = true;
                     break;
                 }
             }
+
+            if (!cuentaActualizada) throw new CuentaNotFoundException("La cuenta con el numero: " + numeroCuenta + " no fue encontrada para actualizar.");
             // Sobrescribir el archivo con las líneas actualizadas
             Files.write(Paths.get(FILE_PATH_CUENTAS), lineas);
+            return buscarCuenta(numeroCuenta);
         } catch (IOException e) {
             throw new DataAccessException("No se pudo actualizar la cuenta", e);
         }
@@ -119,28 +125,32 @@ public class DaoCuenta extends AbstractBaseDao {
     // parseo el archivo y lo guardo en un banco
     public void save(Cuenta cuenta) {
         try {
+            // genero el numero de cuenta
+            cuenta.setNumeroCuenta(generateId(FILE_PATH_CUENTAS));
             // guardar cuenta en el archivo
-            Files.write(Paths.get(FILE_PATH_CUENTAS), Collections.singletonList(cuenta.toString()), StandardOpenOption.APPEND);
+            Files.write(Paths.get(FILE_PATH_CUENTAS), Collections.singletonList(cuenta.toString() + System.lineSeparator()), StandardOpenOption.APPEND);
         } catch (IOException e) {
             throw new DataAccessException("No se pudo guardar la cuenta correctamente", e);
         }
     }
 
-    // parseo el archivo y lo guardo en un cliente
-    public static Cuenta parseCuenta(String data) {
+    // parseo el archivo y lo guardo en una cuenta
+    public Cuenta parseCuenta(String data) throws IOException {
         String[] parts = data.split(";");
-        if (parts.length >= 8) {
+        // hago saltar la excepcion si las partes no son 7
+        if (parts.length != 7) throw new IOException("Error en el formato del archivo");
+        try {
             Cuenta cuenta = new Cuenta();
-            cuenta.setTitular(Long.valueOf(parts[0]));
-            cuenta.setEstaA(Boolean.parseBoolean(parts[1]));
-            cuenta.setSaldo(Double.parseDouble(parts[2]));
-            cuenta.setNumeroCuenta(Long.valueOf(parts[4]));
-            cuenta.setTipoCuenta(parts[5]);
-            cuenta.setMoneda(parts[6]);
-            cuenta.setMovimientos(new ArrayList<>(Arrays.asList(null == parts[7]? new String[0] : parts[7].split(","))));
-            cuenta.setFechaCreacion(LocalDateTime.parse(parts[8]));
+            cuenta.setNumeroCuenta(Long.valueOf(parts[0]));
+            cuenta.setTitular(Long.valueOf(parts[1]));
+            cuenta.setEstaA(Boolean.parseBoolean(parts[2]));
+            cuenta.setSaldo(Double.parseDouble(parts[3]));
+            cuenta.setTipoCuenta(parts[4]);
+            cuenta.setMoneda(parts[5]);
+            cuenta.setFechaCreacion(LocalDate.parse(parts[6]));
             return cuenta;
+        } catch (NumberFormatException | DateTimeParseException e) {
+            throw new DataAccessException("Error en el formato del archivo", e);
         }
-        return null;
     }
 }
