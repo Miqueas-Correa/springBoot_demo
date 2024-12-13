@@ -2,7 +2,6 @@ package ar.edu.utn.frbb.tup.springBoot_demo.controller.validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.TransferirDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.service.ServiceCuenta;
 

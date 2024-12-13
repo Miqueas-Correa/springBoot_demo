@@ -5,7 +5,7 @@ public class CuentaDto {
     private String moneda;
     private Long titular;
     private Boolean estaA;
-    private double saldo;
+    private Double saldo;
 
     // Getters and setters
     public Boolean getEstaA() {
@@ -14,10 +14,10 @@ public class CuentaDto {
     public void setEstaA(Boolean estaA) {
         this.estaA = estaA;
     }
-    public double getSaldo() {
+    public Double getSaldo() {
         return this.saldo;
     }
-    public void setSaldo(double saldo) {
+    public void setSaldo(Double saldo) {
         this.saldo = saldo;
     }
     public String getTipoCuenta() {

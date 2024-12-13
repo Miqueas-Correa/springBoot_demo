@@ -1,6 +1,7 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.service;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cuenta;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.MsjResponce;
@@ -13,7 +14,11 @@ import ar.edu.utn.frbb.tup.springBoot_demo.persistence.DaoMovimientos;
 
 @Service
 public class ServiceCuenta {
+
+    @Autowired
     private DaoCuenta daoCuenta;
+
+    @Autowired
     private DaoMovimientos daoMovimientos;
 
     // traer todas las cuentas
@@ -88,7 +93,7 @@ public class ServiceCuenta {
         // transferencia en pesos, el banco cobrará un cargo del 2% de la transferencia si
         // supera $1000000 (o caso de ser dólares cobra un 0.5% si son más de U$S5000).
 
-        double monto = transferirDto.getMonto();
+        Double monto = transferirDto.getMonto();
 
         if (transferirDto.getMoneda() == "PESOS"){
             if (monto > 1000000) {
@@ -138,8 +143,21 @@ public class ServiceCuenta {
     // metodo para dar de alta la cuenta
     public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException {
         Cuenta cuenta = new Cuenta(cuentaDto);
-
         daoCuenta.save(cuenta);
         return cuenta;
+    }
+
+    // metodo para dar de baja la cuenta
+    public void darDeBajaCuenta(Long numeroCuenta) {
+        Cuenta cuenta = buscarCuenta(numeroCuenta);
+        cuenta.setEstaA(false);
+
+        CuentaDto cuentaDto = new CuentaDto();
+        cuentaDto.setTipoCuenta(cuenta.getTipoCuenta());
+        cuentaDto.setMoneda(cuenta.getMoneda());
+        cuentaDto.setTitular(cuenta.getTitular());
+        cuentaDto.setEstaA(cuenta.getEstaA());
+        cuentaDto.setSaldo(cuenta.getSaldo());
+        daoCuenta.update(cuentaDto, numeroCuenta);
     }
 }

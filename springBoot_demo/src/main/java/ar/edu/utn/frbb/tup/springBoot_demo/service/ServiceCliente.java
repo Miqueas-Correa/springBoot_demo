@@ -1,8 +1,8 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.service;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cliente;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.ClienteAlreadyExistsException;
@@ -10,11 +10,8 @@ import ar.edu.utn.frbb.tup.springBoot_demo.persistence.DaoCliente;
 
 @Service
 public class ServiceCliente {
+    @Autowired
     private DaoCliente daoCliente;
-
-    public ServiceCliente(DaoCliente daoCliente) {
-        this.daoCliente = daoCliente;
-    }
 
     // modificar el cliente
     public Cliente update(ClienteDto clienteDto, long dni) {

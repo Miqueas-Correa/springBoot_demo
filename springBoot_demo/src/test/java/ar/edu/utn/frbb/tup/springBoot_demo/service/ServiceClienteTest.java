@@ -6,6 +6,7 @@ import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.ClienteAlreadyExistsE
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cliente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -20,13 +21,12 @@ public class ServiceClienteTest {
 
     @Mock
     private DaoCliente daoCliente;
-
+    @InjectMocks
     private ServiceCliente serviceCliente;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        serviceCliente = new ServiceCliente(daoCliente);
     }
 
     @Test

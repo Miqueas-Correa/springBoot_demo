@@ -1,16 +1,15 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.model;
-import java.time.LocalDateTime;
-
+import java.time.LocalDate;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.CuentaDto;
 
 public class Cuenta {
     private Long numeroCuenta;
-    private boolean estaA;
+    private Boolean estaA;
     private Long titular;
-    private double saldo;
+    private Double saldo;
     private String tipoCuenta;
     private String moneda;
-    private LocalDateTime fechaCreacion;
+    private LocalDate fechaCreacion;
 
     // constructor
     public Cuenta(){}
@@ -20,7 +19,7 @@ public class Cuenta {
         this.saldo = cuentaDto.getSaldo();
         this.tipoCuenta = cuentaDto.getTipoCuenta();
         this.moneda = cuentaDto.getMoneda();
-        this.fechaCreacion = LocalDateTime.now();
+        this.fechaCreacion = LocalDate.now();
     }
 
     // metodo toString
@@ -29,22 +28,22 @@ public class Cuenta {
         return this.numeroCuenta.toString() + ";" + this.titular.toString() + ";" + this.estaA + ";" + this.saldo + ";" + this.tipoCuenta + ";" + this.moneda.toString() + ";" + this.fechaCreacion.toString();
     }
     // metodo transferencia
-    public void transferencia(Cuenta cuentaDestino, double monto){
+    public void transferencia(Cuenta cuentaDestino, Double monto){
         this.saldo -= monto;
         cuentaDestino.saldo += monto;
     }
-    public void depositar(double monto){
+    public void depositar(Double monto){
         this.saldo += monto;
     }
-    public void retirar(double monto){
+    public void retirar(Double monto){
         this.saldo -= monto;
     }
 
     // Getters y Setters
-    public boolean getEstaA() {
+    public Boolean getEstaA() {
         return this.estaA;
     }
-    public void setEstaA(boolean estaA) {
+    public void setEstaA(Boolean estaA) {
         this.estaA = estaA;
     }
     public Long getTitular() {
@@ -53,10 +52,10 @@ public class Cuenta {
     public void setTitular(Long id){
         this.titular = id;
     }
-    public double getSaldo() {
+    public Double getSaldo() {
         return this.saldo;
     }
-    public void setSaldo(double saldo) {
+    public void setSaldo(Double saldo) {
         this.saldo = saldo;
     }
     public Long getNumeroCuenta() {
@@ -77,10 +76,10 @@ public class Cuenta {
     public void setMoneda(String moneda) {
         this.moneda = moneda;
     }
-    public LocalDateTime getFechaCreacion() {
+    public LocalDate getFechaCreacion() {
         return this.fechaCreacion;
     }
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+    public void setFechaCreacion(LocalDate fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 }

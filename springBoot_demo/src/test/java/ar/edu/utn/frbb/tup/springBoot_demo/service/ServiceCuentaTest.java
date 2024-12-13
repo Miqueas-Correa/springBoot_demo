@@ -137,4 +137,109 @@ public class ServiceCuentaTest {
         assertThrows(IllegalArgumentException.class, () ->
             serviceCuenta.retirar(cuenta, 500.0));
     }
+
+    @Test
+    void testTransferirMonedaDiferente() {
+        Cuenta cuentaDestino = new Cuenta();
+        cuentaDestino.setNumeroCuenta(2L);
+        cuentaDestino.setSaldo(500.0);
+        cuentaDestino.setEstaA(true);
+        cuentaDestino.setTipoCuenta("CUENTA CORRIENTE");
+
+        TransferirDto transferirDto = new TransferirDto();
+        transferirDto.setCuentaOrigen(1L);
+        transferirDto.setCuentaDestino(2L);
+        transferirDto.setMonto(300.0);
+        transferirDto.setMoneda("PESOS");
+
+        when(daoCuenta.buscarCuenta(1L)).thenReturn(cuenta);
+        when(daoCuenta.buscarCuenta(2L)).thenReturn(cuentaDestino);
+        when(daoCuenta.update(any(CuentaDto.class), anyLong())).thenReturn(cuenta);
+
+        var response = serviceCuenta.transferir(transferirDto);
+
+        assertEquals("EXITOSA", response.getEstado());
+        verify(daoMovimientos, times(2)).save(any(MovimientosDto.class));
+    }
+
+    @Test
+    void testTransferirMontoAltoPesos() {
+        Cuenta cuentaDestino = new Cuenta();
+        cuentaDestino.setNumeroCuenta(2L);
+        cuentaDestino.setSaldo(500.0);
+        cuentaDestino.setEstaA(true);
+
+        TransferirDto transferirDto = new TransferirDto();
+        transferirDto.setCuentaOrigen(1L);
+        transferirDto.setCuentaDestino(2L);
+        transferirDto.setMonto(1500000.0);
+        transferirDto.setMoneda("PESOS");
+
+        when(daoCuenta.buscarCuenta(1L)).thenReturn(cuenta);
+        when(daoCuenta.buscarCuenta(2L)).thenReturn(cuentaDestino);
+        when(daoCuenta.update(any(CuentaDto.class), anyLong())).thenReturn(cuenta);
+
+        var response = serviceCuenta.transferir(transferirDto);
+
+        assertEquals("EXITOSA", response.getEstado());
+        verify(daoMovimientos, times(2)).save(any(MovimientosDto.class));
+    }
+
+    @Test
+    void testTransferirMontoAltoDolares() {
+        Cuenta cuentaDestino = new Cuenta();
+        cuentaDestino.setNumeroCuenta(2L);
+        cuentaDestino.setSaldo(10000.0);
+        cuentaDestino.setEstaA(true);
+
+        TransferirDto transferirDto = new TransferirDto();
+        transferirDto.setCuentaOrigen(1L);
+        transferirDto.setCuentaDestino(2L);
+        transferirDto.setMonto(6000.0);
+        transferirDto.setMoneda("DOLARES");
+
+        when(daoCuenta.buscarCuenta(1L)).thenReturn(cuenta);
+        when(daoCuenta.buscarCuenta(2L)).thenReturn(cuentaDestino);
+        when(daoCuenta.update(any(CuentaDto.class), anyLong())).thenReturn(cuenta);
+
+        var response = serviceCuenta.transferir(transferirDto);
+
+        assertEquals("EXITOSA", response.getEstado());
+        verify(daoMovimientos, times(2)).save(any(MovimientosDto.class));
+    }
+
+    @Test
+    void testDarDeBajaCuenta() {
+        when(daoCuenta.buscarCuenta(1L)).thenReturn(cuenta);
+        when(daoCuenta.update(any(CuentaDto.class), eq(1L))).thenReturn(cuenta);
+
+        serviceCuenta.darDeBajaCuenta(1L);
+
+        assertFalse(cuenta.getEstaA());
+        verify(daoCuenta).update(any(CuentaDto.class), eq(1L));
+    }
+
+    @Test
+    void testDepositarMontoNegativo() {
+        assertThrows(IllegalArgumentException.class, () ->
+            serviceCuenta.depositar(cuenta, -100.0));
+    }
+
+    @Test
+    void testRetirarMontoNegativo() {
+        assertThrows(IllegalArgumentException.class, () ->
+            serviceCuenta.retirar(cuenta, -100.0));
+    }
+
+    @Test
+    void testSaveNull() {
+        assertThrows(IllegalArgumentException.class, () ->
+            serviceCuenta.save(null));
+    }
+
+    @Test
+    void testUpdateNull() {
+        assertThrows(IllegalArgumentException.class, () ->
+            serviceCuenta.update(null, 1L));
+    }
 }

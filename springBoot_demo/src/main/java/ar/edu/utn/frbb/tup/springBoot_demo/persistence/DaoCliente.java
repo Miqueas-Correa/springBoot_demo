@@ -30,7 +30,7 @@ public class DaoCliente extends AbstractBaseDao {
             List<Cliente> clientes = new ArrayList<>();
             for (String line : lines) {
                 Cliente cliente = parseCliente(line);
-                if (cliente!= null) clientes.add(cliente);
+                clientes.add(cliente);
             }
             return clientes;
         } catch (IOException e) {

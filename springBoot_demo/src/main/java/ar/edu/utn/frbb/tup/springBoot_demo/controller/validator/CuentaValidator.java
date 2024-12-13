@@ -1,10 +1,8 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.controller.validator;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
-
 import org.springframework.stereotype.Component;
-
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.CuentaDto;
 
 @Component
@@ -14,22 +12,21 @@ public class CuentaValidator {
         validateTipoCuenta(cuentaDto.getTipoCuenta());
         validateTitular(cuentaDto.getTitular());
         validateSaldo(cuentaDto.getSaldo());
-        validateEstaA(cuentaDto.getEstaA());
     }
 
     private void validateTipoCuenta(String tipoCuenta) {
-        if (!"C".equalsIgnoreCase(tipoCuenta) || !"A".equalsIgnoreCase(tipoCuenta)) throw new IllegalArgumentException("Tipo de cuenta no soportada");
+        if (tipoCuenta == null || (!"c".equalsIgnoreCase(tipoCuenta) && !"a".equalsIgnoreCase(tipoCuenta))) throw new IllegalArgumentException("Tipo de cuenta no soportada");
     }
 
     private void validateMoneda(String moneda) {
-        if (!"PESOS".equalsIgnoreCase(moneda) ||!"DOLARES".equalsIgnoreCase(moneda)) throw new IllegalArgumentException("Moneda no soportada");
+        if (moneda == null || (!"pesos".equalsIgnoreCase(moneda) && !"dolares".equalsIgnoreCase(moneda))) throw new IllegalArgumentException("Moneda no soportada");
     }
 
     public void validateTitular(Long titular) {
         if (titular == null) throw new IllegalArgumentException("Titular no puede ser nulo");
     }
 
-    public void validateSaldo(double saldo) {
+    public void validateSaldo(Double saldo) {
         if (saldo < 0) throw new IllegalArgumentException("Saldo no puede ser negativo");
     }
 
@@ -41,13 +38,9 @@ public class CuentaValidator {
         if (movimientos == null) throw new IllegalArgumentException("Movimientos no puede ser nulo");
     }
 
-    public void validateEstaA(Boolean estaA) {
-        if (estaA == null) throw new IllegalArgumentException("EstaA no puede ser nulo");
-    }
-
-    public void validateFechaCreacion(LocalDateTime fechaCreacion) {
+    public void validateFechaCreacion(LocalDate fechaCreacion) {
         if (fechaCreacion == null) throw new IllegalArgumentException("FechaCreacion no puede ser nulo");
         // la fecha no puede ser mayor a la fecha actual
-        if (fechaCreacion.isAfter(LocalDateTime.now())) throw new IllegalArgumentException("FechaCreacion no puede ser mayor a la fecha actual");
+        if (fechaCreacion.isAfter(LocalDate.now())) throw new IllegalArgumentException("FechaCreacion no puede ser mayor a la fecha actual");
     }
 }
