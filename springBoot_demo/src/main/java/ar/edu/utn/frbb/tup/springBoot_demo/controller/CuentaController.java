@@ -13,11 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ar.edu.utn.frbb.tup.springBoot_demo.controller.validator.CuentaValidator;
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.validator.TransferirValidator;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cuenta;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.MsjResponce;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.CuentaDto;
-import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.TransferirDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.CuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.CuentaNotFoundException;
 import ar.edu.utn.frbb.tup.springBoot_demo.service.ServiceCuenta;
@@ -28,9 +26,6 @@ public class CuentaController {
 
     @Autowired
     private CuentaValidator cuentaValidator;
-
-    @Autowired
-    private TransferirValidator transferirValidator;
 
     @Autowired
     private ServiceCuenta cuentaService;
@@ -92,17 +87,6 @@ public class CuentaController {
             return cuentaService.retirar(cuentaService.buscarCuenta(id), monto); // 200
         }catch (CuentaNotFoundException e) {
             return new MsjResponce("FALLIDA", "Error al retirar. Verifique los datos."); // 409
-        }
-    }
-
-    // transferencia de dinero
-    @PutMapping("/transferir")
-    public MsjResponce transferir(@RequestBody TransferirDto transferirDto) {
-        try {
-            transferirValidator.validate(transferirDto); // si no se lanza una excepcion, el cliente es valido
-            return cuentaService.transferir(transferirDto); // 200
-        } catch (CuentaNotFoundException e) {
-            return new MsjResponce("FALLIDA", "Error en la transferencia. Verifique los datos."); // 409
         }
     }
 
