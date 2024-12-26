@@ -10,6 +10,7 @@ public class Cuenta {
     private String tipoCuenta;
     private String moneda;
     private LocalDate fechaCreacion;
+    private String banco;
 
     // constructor
     public Cuenta(){}
@@ -20,6 +21,7 @@ public class Cuenta {
         this.tipoCuenta = cuentaDto.getTipoCuenta();
         this.moneda = cuentaDto.getMoneda();
         this.fechaCreacion = LocalDate.now();
+        this.banco = cuentaDto.getBanco();
     }
 
     // metodo toString
@@ -40,6 +42,12 @@ public class Cuenta {
     }
 
     // Getters y Setters
+    public String getBanco() {
+        return this.banco;
+    }
+    public void setBanco(String banco) {
+        this.banco = banco;
+    }
     public Boolean getEstaA() {
         return this.estaA;
     }

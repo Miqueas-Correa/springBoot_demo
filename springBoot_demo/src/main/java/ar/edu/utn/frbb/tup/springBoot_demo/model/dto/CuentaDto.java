@@ -6,8 +6,15 @@ public class CuentaDto {
     private Long titular;
     private Boolean estaA;
     private Double saldo;
+    private String banco;
 
     // Getters and setters
+    public String getBanco() {
+        return this.banco;
+    }
+    public void setBanco(String banco) {
+        this.banco = banco;
+    }
     public Boolean getEstaA() {
         return this.estaA;
     }

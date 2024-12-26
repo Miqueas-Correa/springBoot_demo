@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ar.edu.utn.frbb.tup.springBoot_demo.controller.validator.TransferirValidator;
+import ar.edu.utn.frbb.tup.springBoot_demo.service.TransferService;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.MsjResponce;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.TransferirDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.CuentaNotFoundException;
@@ -25,7 +26,8 @@ public class TransferController {
             transferValidator.validate(transferirDto); // si no se lanza una excepcion, el cliente es valido
             return TransferService.transferir(transferirDto); // 200
         } catch (CuentaNotFoundException e) {
-            return new MsjResponce("FALLIDA", "Error en la transferencia. Verifique los datos."); // 409
+            return new MsjResponce("FALLIDA", 
+            "Error en la transferencia. Verifique los datos."); // 409
         }
     }
 }
