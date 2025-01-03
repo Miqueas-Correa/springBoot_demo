@@ -27,6 +27,7 @@ public class DaoCliente extends AbstractBaseDao {
     public List<Cliente> listarClientes() {
         try {
             List<String> lines = Files.readAllLines(Paths.get(FILE_PATH_CLIENTES));
+            if (lines.isEmpty()) return Collections.emptyList();
             List<Cliente> clientes = new ArrayList<>();
             for (String line : lines) {
                 Cliente cliente = parseCliente(line);
@@ -34,15 +35,15 @@ public class DaoCliente extends AbstractBaseDao {
             }
             return clientes;
         } catch (IOException e) {
-            return Collections.emptyList();
+            throw new DataAccessException("Error al leer el archivo de clientes", e);
         }
     }
 
     // parseo el archivo y lo guardo en un cliente
     private Cliente parseCliente(String data) throws IOException {
         String[] parts = data.split(";");
-        // hago saltar la excepcion si las partes no son 7
-        if (parts.length != 7) throw new IOException("Error en el formato del archivo");
+        // hago saltar la excepcion si las partes no son 6
+        if (parts.length != 6) throw new IOException("Formato incorrecto. Línea: '" + data + "'");
 
         try {
             Cliente cliente = new Cliente();
@@ -51,11 +52,10 @@ public class DaoCliente extends AbstractBaseDao {
             cliente.setTelefono(Long.valueOf(parts[2]));
             cliente.setEmail(parts[3]);
             cliente.setFecha_de_nacimiento(LocalDate.parse(parts[4]));
-            cliente.setBanco(parts[5]);
-            cliente.setFecha_de_alta(LocalDate.parse(parts[6]));
-            // parsear las cuentas correspondientes al cliente del cliente
+            cliente.setFecha_de_alta(LocalDate.parse(parts[5]));
             return cliente;
         } catch (NumberFormatException | DateTimeParseException e) {
+            System.err.println("Error en el formato del cliente: " + data + " - " + e.getMessage());
             throw new DataAccessException("Error en el formato del archivo", e);
         }
     }
@@ -72,7 +72,6 @@ public class DaoCliente extends AbstractBaseDao {
                     Cliente cliente = buscarClientePorDni(dni);
                     cliente.setDni(clienteDto.getDni());
                     cliente.setNombre_y_apellido(clienteDto.getNombre_y_apellido());
-                    cliente.setBanco(clienteDto.getBanco());
                     cliente.setEmail(clienteDto.getEmail());
                     cliente.setTelefono(clienteDto.getTelefono());
 
@@ -95,7 +94,11 @@ public class DaoCliente extends AbstractBaseDao {
     public void save(Cliente cliente) {
         try {
             // guardar el cliente en el archivo
-            Files.write(Paths.get(FILE_PATH_CLIENTES), Collections.singletonList(cliente.toString() + System.lineSeparator()), StandardOpenOption.APPEND);
+            Files.write(
+            Paths.get(FILE_PATH_CLIENTES), 
+            Collections.singletonList(cliente.toString()), 
+            StandardOpenOption.APPEND
+        );
         } catch (IOException e) {
             throw new DataAccessException("No se pudo guardar el cliente", e);
         }
@@ -109,9 +112,7 @@ public class DaoCliente extends AbstractBaseDao {
                 Cliente cliente = parseCliente(line);
 
                 // Verificamos si el cliente fue correctamente parseado antes de acceder a sus datos
-                if (cliente != null && cliente.getDni().equals(dni)) {
-                    return cliente;
-                }
+                if (cliente != null && cliente.getDni().equals(dni)) return cliente;
             }
         } catch (IOException e) {
             throw new DataAccessException("No se pudo buscar el cliente", e);

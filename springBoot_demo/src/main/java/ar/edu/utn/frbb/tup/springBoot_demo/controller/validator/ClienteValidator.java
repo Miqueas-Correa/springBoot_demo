@@ -12,7 +12,6 @@ public class ClienteValidator {
         validateDni(clienteDto.getDni());
         validateNombre(clienteDto.getNombre_y_apellido());
         validateFechaNacimiento(clienteDto.getFechaNacimiento());
-        validateBanco(clienteDto.getBanco());
         validateTelefono(clienteDto.getTelefono());
         validateEmail(clienteDto.getEmail());
     }
@@ -32,10 +31,6 @@ public class ClienteValidator {
     private static Boolean validarEmail(String email) {
         String regex = "^[\\w-\\.]+@[\\w-]+\\.[a-z]{2,}$";
         return email != null && email.matches(regex);
-    }
-    // validar banco
-    private void validateBanco(String banco) {
-        if (banco == null || (!"nacion".equalsIgnoreCase(banco) && !"provincia".equalsIgnoreCase(banco))) throw new IllegalArgumentException("El banco debe ser nacion o provincia");
     }
     // validar dni
     private void validateDni(Long dni) throws ClienteAlreadyExistsException {
