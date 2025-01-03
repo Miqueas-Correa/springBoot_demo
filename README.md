@@ -20,7 +20,7 @@
      - POST:
         DISPONIBLE PARA PRUEBAS
         {
-        "dni": 12345601,
+        "dni": 12345600,
         "nombre_y_apellido": "Test2025",
         "telefono": 1234567890,
         "email": "juan.perez@example.com",
@@ -37,7 +37,7 @@
         "fechaNacimiento": "1990-05-15"
         }
        
-     - DELETE: (dni "obligatorio")
+     - DELETE: (dni "obligatorio") "dni": 12345600, primero crear y luego borrar.
 
 ## - Cuenta:
   * /cuenta
