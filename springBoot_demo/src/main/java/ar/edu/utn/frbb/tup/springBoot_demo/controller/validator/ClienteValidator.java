@@ -44,7 +44,8 @@ public class ClienteValidator {
         if (nombre_y_apellido.trim().isEmpty()) throw new IllegalArgumentException("El nombre y el apellido no pueden estar vacíos.");
     }
     // validar fecha de nacimiento
-    private void validateFechaNacimiento(LocalDate fechaNacimiento)throws InvalidAgeException {
+    private void validateFechaNacimiento(LocalDate fechaNacimiento) throws InvalidAgeException {
         if (fechaNacimiento == null) throw new IllegalArgumentException("La fecha de nacimiento no puede ser nula.");
+        if (fechaNacimiento.isAfter(LocalDate.now())) throw new IllegalArgumentException("La fecha de nacimiento no puede ser una fecha futura.");
     }
 }
