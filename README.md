@@ -1,9 +1,10 @@
 # RUTAS:
 
-- Cliente:
+## - Cliente:
   * /cliente
   * /cliente/{dni}
   * Cuenta con:
+    
      - GET: (dni "opcional")
         {
         "dni": 12345678,
@@ -15,36 +16,32 @@
         "fecha_de_alta": "2024-01-01",
         "edad": 34
         }
+       
      - POST:
+        DISPONIBLE PARA PRUEBAS
         {
-        "dni": 12345679,
-        "nombre_y_apellido": "Juan Perez Test",
+        "dni": 12345601,
+        "nombre_y_apellido": "Test2025",
         "telefono": 1234567890,
         "email": "juan.perez@example.com",
-        "fechaNacimiento": "1990-05-15",
-        "banco": "nacion"
+        "fechaNacimiento": "1990-05-15"
         }
+       
      - PUT: (dni obligatorio)
+        DISPONIBLE PARA PRUEBAS
         {
         "dni": 12345679,
-        "nombre_y_apellido": "Juan Perez Test edit",
+        "nombre_y_apellido": "Juan Perez Test2025 edit",
         "telefono": 1234567890,
         "email": "juan.perez@example.com",
-        "fechaNacimiento": "1990-05-15",
-        "banco": "nacion"
+        "fechaNacimiento": "1990-05-15"
         }
+       
      - DELETE: (dni "obligatorio")
 
-- Cuenta:
+## - Cuenta:
   * /cuenta
   * /cuenta/{numeroCuenta}
-  * /cuenta/transferir/{numeroCuenta}
-     - {
-       "cuentaOrigen": 123456791,
-       "cuentaDestino": 123456790,
-       "monto": 5000.0,
-       "moneda": "dolares"
-       }
   * /cuenta/depositar/{numeroCuenta}
      - 100.75
   * /cuenta/retirar/{numeroCuenta}
@@ -78,20 +75,27 @@
         "moneda": "dolares"
         }
      - DELETE: (numeroCuenta "obligatorio"), solo le da de baja la cuenta
+   
+## - Transferir:
+  * /cuenta/transferir/{numeroCuenta}
+     - {
+       "cuentaOrigen": 123456791,
+       "cuentaDestino": 123456790,
+       "monto": 5000.0,
+       "moneda": "dolares"
+       }
 
-- Movimientos:
+## - Movimientos:
   * /cuenta/movimientos
   * /cuenta/movimientos/{numeroCuenta}
   * Cuenta con: 
      - GET: (numero de cuenta "opcional") trae todos los movimmientos de esa cuenta.
-        [
-           {
-               "id": 1,
-               "descripcion": "Compra en supermercado",
-               "fecha_y_hs": "2024-12-05",
-               "numeroCuenta": 123456789
-           }
-        ]
+        {
+        "id": 1,
+        "descripcion": "Compra en supermercado",
+        "fecha_y_hs": "2024-12-05",
+        "numeroCuenta": 123456789
+        }
      - POST:
         {
         "descripcion": "Creacion de prueba",
