@@ -1,5 +1,6 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.model;
 import java.time.LocalDate;
+import java.time.Period;
 
 public class Persona {
     // Atributos
@@ -52,8 +53,8 @@ public class Persona {
     }
 
     // Método para calcular la edad
-    public int getEdad(){
-        LocalDate fechaActual = LocalDate.now();
-        return fechaActual.getYear() - this.fecha_de_nacimiento.getYear();
+    public int getEdad() {
+        if (this.fecha_de_nacimiento == null) throw new IllegalArgumentException("La fecha de nacimiento no puede ser nula");
+        return Period.between(this.fecha_de_nacimiento, LocalDate.now()).getYears();
     }
 }
