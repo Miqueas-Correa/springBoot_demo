@@ -15,15 +15,15 @@ public class CuentaValidator {
         validateBanco(cuentaDto.getBanco());
     }
 
-    private void validateBanco(String banco) {
+    public void validateBanco(String banco) {
         if (banco == null || (!"nacion".equalsIgnoreCase(banco) && !"provincia".equalsIgnoreCase(banco))) throw new IllegalArgumentException("Banco no soportado");
     }
 
-    private void validateTipoCuenta(String tipoCuenta) {
+    public void validateTipoCuenta(String tipoCuenta) {
         if (tipoCuenta == null || (!"c".equalsIgnoreCase(tipoCuenta) && !"a".equalsIgnoreCase(tipoCuenta))) throw new IllegalArgumentException("Tipo de cuenta no soportada");
     }
 
-    private void validateMoneda(String moneda) {
+    public void validateMoneda(String moneda) {
         if (moneda == null || (!"pesos".equalsIgnoreCase(moneda) && !"dolares".equalsIgnoreCase(moneda))) throw new IllegalArgumentException("Moneda no soportada");
     }
 
