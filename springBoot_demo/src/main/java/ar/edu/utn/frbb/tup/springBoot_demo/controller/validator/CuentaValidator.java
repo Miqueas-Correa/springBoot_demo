@@ -12,6 +12,11 @@ public class CuentaValidator {
         validateTipoCuenta(cuentaDto.getTipoCuenta());
         validateTitular(cuentaDto.getTitular());
         validateSaldo(cuentaDto.getSaldo());
+        validateBanco(cuentaDto.getBanco());
+    }
+
+    private void validateBanco(String banco) {
+        if (banco == null || (!"nacion".equalsIgnoreCase(banco) && !"provincia".equalsIgnoreCase(banco))) throw new IllegalArgumentException("Banco no soportado");
     }
 
     private void validateTipoCuenta(String tipoCuenta) {
@@ -40,7 +45,6 @@ public class CuentaValidator {
 
     public void validateFechaCreacion(LocalDate fechaCreacion) {
         if (fechaCreacion == null) throw new IllegalArgumentException("FechaCreacion no puede ser nulo");
-        // la fecha no puede ser mayor a la fecha actual
         if (fechaCreacion.isAfter(LocalDate.now())) throw new IllegalArgumentException("FechaCreacion no puede ser mayor a la fecha actual");
     }
 }

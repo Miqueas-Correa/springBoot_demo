@@ -27,7 +27,14 @@ public class Cuenta {
     // metodo toString
     @Override
     public String toString(){
-        return this.numeroCuenta.toString() + ";" + this.titular.toString() + ";" + this.estaA + ";" + this.saldo + ";" + this.tipoCuenta + ";" + this.moneda.toString() + ";" + this.fechaCreacion.toString();
+        return this.numeroCuenta.toString() + ";" 
+        + this.titular.toString() + ";" 
+        + this.estaA + ";" 
+        + this.saldo + ";" 
+        + this.tipoCuenta + ";" 
+        + this.moneda.toString() + ";" 
+        + this.fechaCreacion.toString() + ";"
+        + this.banco;
     }
     // metodo transferencia
     public void transferencia(Cuenta cuentaDestino, Double monto){

@@ -1,10 +1,13 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.service;
 
+import java.net.http.HttpResponse;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cuenta;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.MsjResponce;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.Respuesta;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.CuentaAlreadyExistsException;
@@ -21,31 +24,32 @@ public class ServiceCuenta {
     private DaoMovimientos daoMovimientos;
 
     // traer todas las cuentas
-    public List<Cuenta> darCuentas(){
-        return daoCuenta.listarCuentas();
+    public Respuesta<List<Cuenta>> darCuentas(){
+        return new Respuesta<>(new MsjResponce("EXITOSA", "Aqui la lista de cuentas:"), daoCuenta.listarCuentas(), HttpStatus.OK);
     }
 
     // buscar cuenta por numero de cuenta
-    public Cuenta buscarCuenta(Long numeroCuenta){
-        return daoCuenta.buscarCuenta(numeroCuenta);
+    public Respuesta<Cuenta> buscarCuenta(Long numeroCuenta){
+        return new Respuesta<>(new MsjResponce("EXITOSA", "Aqui la cuenta:"), daoCuenta.buscarCuenta(numeroCuenta), HttpStatus.OK);
     }
 
     // save
-    public void save(Cuenta cuenta){
+    public Respuesta<Cuenta> save(Cuenta cuenta){
         if (cuenta == null) throw new IllegalArgumentException("Error: no se pudo guardar la cuenta.");
-        daoCuenta.save(cuenta);
+        return new Respuesta<>(new MsjResponce("EXITOSA", "Se guardo la cuenta."), daoCuenta.save(cuenta), HttpStatus.CREATED);
     }
 
     // update
-    public Cuenta update(CuentaDto cuentaDto, long numeroCuenta){
+    public Respuesta<Cuenta> update(CuentaDto cuentaDto, long numeroCuenta){
         if (cuentaDto == null) throw new IllegalArgumentException("Error: no se pudo actualizar la cuenta.");
-        return daoCuenta.update(cuentaDto, numeroCuenta);
+        return new Respuesta<>(new MsjResponce("EXITOSA", "Se guardo la cuenta."), daoCuenta.update(cuentaDto, numeroCuenta), HttpStatus.CREATED);
     }
 
     // metodo para depositar
-    public MsjResponce depositar(Cuenta cuenta, Double monto){
-        if (!cuenta.getEstaA()) return new MsjResponce("FALLIDA.","La cuenta debe estar activa.");
-        if (monto < 0) return new MsjResponce("FALLIDA.","No puede ingresar un monto menor a 0.");
+    public Respuesta<Cuenta> depositar(Respuesta<Cuenta> respuesta, Double monto){
+        Cuenta cuenta = respuesta.getDatos();
+        if (!cuenta.getEstaA()) return new Respuesta<>(new MsjResponce("FALLIDA.","La cuenta debe estar activa."), null, HttpStatus.BAD_REQUEST);
+        if (monto < 0) return new Respuesta<>(new MsjResponce("FALLIDA.","El monto debe ser mayor a 0."), null, HttpStatus.BAD_REQUEST);
 
         cuenta.depositar(monto);
 
@@ -66,15 +70,16 @@ public class ServiceCuenta {
 
         daoMovimientos.save(movimientoDto1);
 
-        return new MsjResponce("EXITOSA", "Se depositó el dinero a la cuenta.");
+        return new Respuesta<>(new MsjResponce("EXITOSA", "Se deposito el monto."), cuenta, HttpStatus.CREATED);
     }
 
     // metodo para retirar
-    public MsjResponce retirar(Cuenta cuenta, Double monto){
-        if (!cuenta.getEstaA()) return new MsjResponce("FALLIDA.","La cuenta debe estar activa.");
-        if (monto < 0) return new MsjResponce("FALLIDA.","No puede retirar un monto menor a 0.");
-        if (cuenta.getSaldo() < monto) return new MsjResponce("FALLIDA.","No tiene saldo suficiente.");
-        if (cuenta.getTipoCuenta().equals("CAJA DE AHORRO")) return new MsjResponce("FALLIDA.","No se puede retirar de una caja de ahorro.");
+    public Respuesta<Cuenta> retirar(Respuesta<Cuenta> respuesta, Double monto){
+        Cuenta cuenta = respuesta.getDatos();
+        if (!cuenta.getEstaA()) return new Respuesta<>(new MsjResponce("FALLIDA.","La cuenta debe estar activa."), null, HttpStatus.BAD_REQUEST);
+        if (monto < 0) return new Respuesta<>(new MsjResponce("FALLIDA.","El monto debe ser mayor a 0."), null, HttpStatus.BAD_REQUEST);
+        if (cuenta.getSaldo() < monto) return new Respuesta<>(new MsjResponce("FALLIDA.","Saldo insuficiente."), null, HttpStatus.BAD_REQUEST);
+        if (cuenta.getTipoCuenta().equals("a")) return new Respuesta<>(new MsjResponce("FALLIDA.","No se puede retirar de una cuenta de caja de ahorro."), null, HttpStatus.BAD_REQUEST);
 
         cuenta.retirar(monto);
 
@@ -94,19 +99,20 @@ public class ServiceCuenta {
 
         daoMovimientos.save(movimientoDto1);
 
-        return new MsjResponce("EXITOSA", "Se retiró el dinero de la cuenta.");
+        return new Respuesta<>(new MsjResponce("EXITOSA", "Se retiro el monto."), cuenta, HttpStatus.OK);
     }
 
     // metodo para dar de alta la cuenta
-    public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException {
+    public Respuesta<Cuenta> darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException {
         Cuenta cuenta = new Cuenta(cuentaDto);
         daoCuenta.save(cuenta);
-        return cuenta;
+        return new Respuesta<>(new MsjResponce("EXITOSA", "Se guardo la cuenta."), cuenta, HttpStatus.CREATED);
     }
 
     // metodo para dar de baja la cuenta
-    public void darDeBajaCuenta(Long numeroCuenta) {
-        Cuenta cuenta = buscarCuenta(numeroCuenta);
+    public Respuesta<Cuenta> darDeBajaCuenta(Long numeroCuenta) {
+        Respuesta<Cuenta> respuesta = buscarCuenta(numeroCuenta);
+        Cuenta cuenta = respuesta.getDatos();
         cuenta.setEstaA(false);
 
         CuentaDto cuentaDto = new CuentaDto();
@@ -116,5 +122,7 @@ public class ServiceCuenta {
         cuentaDto.setEstaA(cuenta.getEstaA());
         cuentaDto.setSaldo(cuenta.getSaldo());
         daoCuenta.update(cuentaDto, numeroCuenta);
+
+        return new Respuesta<>(new MsjResponce("EXITOSA", "Se dio de baja la cuenta."), null, HttpStatus.OK);
     }
 }

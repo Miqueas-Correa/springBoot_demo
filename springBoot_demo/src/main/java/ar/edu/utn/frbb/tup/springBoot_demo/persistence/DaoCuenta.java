@@ -107,28 +107,20 @@ public class DaoCuenta extends AbstractBaseDao {
         }
     }
 
-    // el titular es el dni del cliente al cual pertenece la cuenta
-    public Cuenta buscarCuentaPorTitular(Long titular) {
-        try {
-            List<String> lines = Files.readAllLines(Paths.get(FILE_PATH_CUENTAS));
-            for (String line : lines) {
-                Cuenta cuenta = parseCuenta(line);
-                if (cuenta.getTitular().equals(titular)) return cuenta;
-            }
-        } catch (IOException e) {
-            System.out.println("No se pudo leer el cliente");
-        }
-        return null;
-    }
-
     // guardar la cuenta en el archivo
     // parseo el archivo y lo guardo en un banco
-    public void save(Cuenta cuenta) {
+    public Cuenta save(Cuenta cuenta) {
+        if (cuenta == null) throw new IllegalArgumentException("La cuenta no puede ser nula");
         try {
             // genero el numero de cuenta
             cuenta.setNumeroCuenta(generateId(FILE_PATH_CUENTAS));
             // guardar cuenta en el archivo
-            Files.write(Paths.get(FILE_PATH_CUENTAS), Collections.singletonList(cuenta.toString() + System.lineSeparator()), StandardOpenOption.APPEND);
+            Files.write(
+                Paths.get(FILE_PATH_CUENTAS),
+                Collections.singletonList(cuenta.toString()),
+                StandardOpenOption.APPEND
+            );
+            return cuenta;
         } catch (IOException e) {
             throw new DataAccessException("No se pudo guardar la cuenta correctamente", e);
         }
