@@ -1,5 +1,6 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,12 @@ public class CuentaController {
     // GET /cuenta
     @GetMapping
     public ResponseEntity<Respuesta<List<Cuenta>>> darCuentas() {
-        return new ResponseEntity<>(cuentaService.darCuentas(), HttpStatus.OK); // 200
+        Respuesta<List<Cuenta>> respuesta = cuentaService.darCuentas();
+        if (respuesta.getDatos() == null || respuesta.getDatos().isEmpty()) {
+            respuesta.setDatos(new ArrayList<>());
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204
+        }
+        return new ResponseEntity<>(respuesta, HttpStatus.OK); // 200
     }
 
     // GET /cuenta/{id}

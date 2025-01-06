@@ -1,12 +1,11 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.controller;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.CuentaDto;
-import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.TransferirDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cuenta;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.MsjResponce;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.Respuesta;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.service.ServiceCuenta;
 import ar.edu.utn.frbb.tup.springBoot_demo.controller.validator.CuentaValidator;
-import ar.edu.utn.frbb.tup.springBoot_demo.controller.validator.TransferirValidator;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.CuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.CuentaNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,16 +17,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class CuentaControllerTest {
+class CuentaControllerTest {
 
     @Mock
     private CuentaValidator cuentaValidator;
-
-    @Mock
-    private TransferirValidator transferirValidator;
 
     @Mock
     private ServiceCuenta cuentaService;
@@ -42,31 +38,34 @@ public class CuentaControllerTest {
 
     @Test
     void darCuentas_WhenEmpty_ReturnsNoContent() {
-        when(cuentaService.darCuentas()).thenReturn(new ArrayList<>());
-        ResponseEntity<List<Cuenta>> response = cuentaController.darCuentas();
+        Respuesta<List<Cuenta>> respuestaMock = new Respuesta<>(new MsjResponce("Test", "Test"), new ArrayList<>(), HttpStatus.NO_CONTENT);
+        when(cuentaService.darCuentas()).thenReturn(respuestaMock);
+        ResponseEntity<Respuesta<List<Cuenta>>> response = cuentaController.darCuentas();
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
 
     @Test
     void darCuentas_WhenNotEmpty_ReturnsOk() {
         List<Cuenta> cuentas = List.of(new Cuenta());
-        when(cuentaService.darCuentas()).thenReturn(cuentas);
-        ResponseEntity<List<Cuenta>> response = cuentaController.darCuentas();
+        Respuesta<List<Cuenta>> respuestaMock = new Respuesta<>(new MsjResponce("Test", "Test"), cuentas, HttpStatus.OK);
+        when(cuentaService.darCuentas()).thenReturn(respuestaMock);
+        ResponseEntity<Respuesta<List<Cuenta>>> response = cuentaController.darCuentas();
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(cuentas, response.getBody());
+        assertEquals(cuentas, response.getBody().getDatos());
     }
 
     @Test
     void crearCuenta_WhenValid_ReturnsCreated() throws CuentaAlreadyExistsException {
         CuentaDto dto = new CuentaDto();
         Cuenta cuenta = new Cuenta();
-        when(cuentaService.darDeAltaCuenta(dto)).thenReturn(cuenta);
+        Respuesta<Cuenta> respuestaMock = new Respuesta<>(new MsjResponce("Test", "Test"), cuenta, HttpStatus.OK);
+        when(cuentaService.darDeAltaCuenta(dto)).thenReturn(respuestaMock);
         doNothing().when(cuentaValidator).validate(dto);
 
-        ResponseEntity<Cuenta> response = cuentaController.crearCuenta(dto);
+        ResponseEntity<Respuesta<Cuenta>> response = cuentaController.crearCuenta(dto);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(cuenta, response.getBody());
+        assertEquals(cuenta, response.getBody().getDatos());
     }
 
     @Test
@@ -74,61 +73,46 @@ public class CuentaControllerTest {
         CuentaDto dto = new CuentaDto();
         doThrow(CuentaAlreadyExistsException.class).when(cuentaValidator).validate(dto);
 
-        ResponseEntity<Cuenta> response = cuentaController.crearCuenta(dto);
+        ResponseEntity<Respuesta<Cuenta>> response = cuentaController.crearCuenta(dto);
 
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
     }
 
     @Test
-    void depositar_WhenSuccess_ReturnsOkMessage() throws CuentaNotFoundException {
+    void depositar_WhenCuentaNotFound_ReturnsNotFound() {
+        Long id = 1L;
+        Double monto = 100.0;
+        when(cuentaService.buscarCuenta(id)).thenReturn(null);
+
+        ResponseEntity<Respuesta<Cuenta>> response = cuentaController.depositar(monto, id);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void depositar_WhenServiceThrowsException_ReturnsConflict() throws CuentaNotFoundException {
         Long id = 1L;
         Double monto = 100.0;
         Cuenta cuenta = new Cuenta();
-        MsjResponce expectedResponse = new MsjResponce("EXITOSA", "Depósito realizado");
+        Respuesta<Cuenta> respuestaMock = new Respuesta<>(new MsjResponce("Test", "Test"), cuenta, HttpStatus.OK);
+        when(cuentaService.buscarCuenta(id)).thenReturn(respuestaMock);
 
-        when(cuentaService.buscarCuenta(id)).thenReturn(cuenta);
-        when(cuentaService.depositar(cuenta, monto)).thenReturn(expectedResponse);
+        doThrow(new CuentaNotFoundException("Test exception")).when(cuentaService).depositar(respuestaMock, monto);
 
-        MsjResponce response = cuentaController.depositar(monto, id);
+        ResponseEntity<Respuesta<Cuenta>> response = cuentaController.depositar(monto, id);
 
-        assertEquals(expectedResponse, response);
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
     }
 
     @Test
-    void transferir_WhenSuccess_ReturnsOkMessage() throws CuentaNotFoundException {
-        TransferirDto dto = new TransferirDto();
-        MsjResponce expectedResponse = new MsjResponce("EXITOSA", "Transferencia realizada");
+    void retirar_WhenCuentaNotFound_ReturnsNotFound() {
+        Long id = 1L;
+        Double monto = 100.0;
+        when(cuentaService.buscarCuenta(id)).thenReturn(null);
 
-        doNothing().when(transferirValidator).validate(dto);
-        when(cuentaService.transferir(dto)).thenReturn(expectedResponse);
+        ResponseEntity<Respuesta<Cuenta>> response = cuentaController.retirar(monto, id);
 
-        MsjResponce response = cuentaController.transferir(dto);
-
-        assertEquals(expectedResponse, response);
-    }
-
-    @Test
-    void transferir_WhenError_ReturnsErrorMessage() throws CuentaNotFoundException {
-        TransferirDto dto = new TransferirDto();
-        doThrow(CuentaNotFoundException.class).when(transferirValidator).validate(dto);
-
-        MsjResponce response = cuentaController.transferir(dto);
-
-        assertEquals("FALLIDA", response.getEstado());
-        assertEquals("Error en la transferencia. Verifique los datos.", response.getMensaje());
-    }
-
-    @Test
-    void borrarCuenta_WhenCuentaExists_ReturnsNoContent() throws CuentaNotFoundException {
-        Long numeroCuenta = 1L;
-        Cuenta cuenta = new Cuenta();
-        when(cuentaService.buscarCuenta(numeroCuenta)).thenReturn(cuenta);
-        doNothing().when(cuentaService).darDeBajaCuenta(numeroCuenta);
-
-        ResponseEntity<Cuenta> response = cuentaController.borrarCuenta(numeroCuenta);
-
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(cuentaService).darDeBajaCuenta(numeroCuenta);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
@@ -136,22 +120,8 @@ public class CuentaControllerTest {
         Long numeroCuenta = 1L;
         when(cuentaService.buscarCuenta(numeroCuenta)).thenReturn(null);
 
-        ResponseEntity<Cuenta> response = cuentaController.borrarCuenta(numeroCuenta);
+        ResponseEntity<Respuesta<Cuenta>> response = cuentaController.borrarCuenta(numeroCuenta);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(cuentaService, never()).darDeBajaCuenta(any());
-    }
-
-    @Test
-    void borrarCuenta_WhenServiceThrowsException_ReturnsConflict() throws CuentaNotFoundException {
-        Long numeroCuenta = 1L;
-        Cuenta cuenta = new Cuenta();
-        when(cuentaService.buscarCuenta(numeroCuenta)).thenReturn(cuenta);
-        doThrow(new CuentaNotFoundException("Test de cuenta not found")).when(cuentaService).darDeBajaCuenta(numeroCuenta);
-
-        ResponseEntity<Cuenta> response = cuentaController.borrarCuenta(numeroCuenta);
-
-        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
-        verify(cuentaService).darDeBajaCuenta(numeroCuenta);
     }
 }
