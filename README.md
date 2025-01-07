@@ -43,7 +43,7 @@
   * /cuenta
   * /cuenta/{numeroCuenta}
   * /cuenta/depositar/{numeroCuenta}
-     - 100.75
+     - 100.00
   * /cuenta/retirar/{numeroCuenta}
      - 100.75
   * Cuenta con:
@@ -59,22 +59,23 @@
         }
      - POST:
         {
-        "numeroCuenta": 987654333,
         "estaA": true,
         "titular": 12247172,
         "saldo": 500500.75,
         "tipoCuenta": "c",
-        "moneda": "dolares"
-        }
-     - PUT:  (numeroCuenta "obligatorio")
+        "moneda": "dolares",
+        "banco": "provincia"
+}
+     - PUT:  (numeroCuenta "obligatorio") 987654324 disponible primero crear
         {
         "estaA": true,
-        "titular": "12247172",
+        "titular": 12247172,
         "saldo": 500500.75,
         "tipoCuenta": "c",
-        "moneda": "dolares"
-        }
-     - DELETE: (numeroCuenta "obligatorio"), solo le da de baja la cuenta
+        "moneda": "pesos",
+        "banco": "provincia"
+}
+     - DELETE: (numeroCuenta "obligatorio"), solo le da de baja la cuenta, 987654324
    
 ## - Transferir:
   * /cuenta/transferir/{numeroCuenta}
