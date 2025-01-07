@@ -1,6 +1,5 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.service;
 
-import java.net.http.HttpResponse;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -123,6 +122,6 @@ public class ServiceCuenta {
         cuentaDto.setSaldo(cuenta.getSaldo());
         daoCuenta.update(cuentaDto, numeroCuenta);
 
-        return new Respuesta<>(new MsjResponce("EXITOSA", "Se dio de baja la cuenta."), null, HttpStatus.OK);
+        return new Respuesta<>(new MsjResponce("EXITOSA", "Se dio de baja la cuenta."), cuenta, HttpStatus.OK);
     }
 }
