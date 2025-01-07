@@ -127,10 +127,10 @@ public class DaoCuenta extends AbstractBaseDao {
     }
 
     // parseo el archivo y lo guardo en una cuenta
-    public Cuenta parseCuenta(String data) throws IOException {
+    public Cuenta parseCuenta(String data) {
         String[] parts = data.split(";");
         // hago saltar la excepcion si las partes no son 8
-        if (parts.length != 8) throw new IOException("Error en el formato del archivo");
+        if (parts.length != 8) throw new DataAccessException("Error en el formato del archivo", null);
         try {
             Cuenta cuenta = new Cuenta();
             cuenta.setNumeroCuenta(Long.valueOf(parts[0]));
