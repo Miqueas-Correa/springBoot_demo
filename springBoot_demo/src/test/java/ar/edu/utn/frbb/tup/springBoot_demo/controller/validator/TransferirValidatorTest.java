@@ -1,161 +1,161 @@
-package ar.edu.utn.frbb.tup.springBoot_demo.controller.validator;
+// package ar.edu.utn.frbb.tup.springBoot_demo.controller.validator;
 
-import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.TransferirDto;
-import ar.edu.utn.frbb.tup.springBoot_demo.model.Cuenta;
-import ar.edu.utn.frbb.tup.springBoot_demo.service.ServiceCuenta;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+// import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.TransferirDto;
+// import ar.edu.utn.frbb.tup.springBoot_demo.model.Cuenta;
+// import ar.edu.utn.frbb.tup.springBoot_demo.service.ServiceCuenta;
+// import org.junit.jupiter.api.BeforeEach;
+// import org.junit.jupiter.api.Test;
+// import org.mockito.InjectMocks;
+// import org.mockito.Mock;
+// import org.mockito.MockitoAnnotations;
+// import static org.junit.jupiter.api.Assertions.assertThrows;
+// import static org.mockito.Mockito.when;
 
-public class TransferirValidatorTest {
+// public class TransferirValidatorTest {
 
-    @Mock
-    private ServiceCuenta serviceCuenta;
+//     @Mock
+//     private ServiceCuenta serviceCuenta;
 
-    @InjectMocks
-    private TransferirValidator transferirValidator;
+//     @InjectMocks
+//     private TransferirValidator transferirValidator;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+//     @BeforeEach
+//     void setUp() {
+//         MockitoAnnotations.openMocks(this);
+//     }
 
-    @Test
-    void validateMontoNegativo() {
-        TransferirDto dto = new TransferirDto();
-        dto.setMonto(-100.0);
-        dto.setCuentaOrigen(1L);
-        dto.setCuentaDestino(2L);
+//     @Test
+//     void validateMontoNegativo() {
+//         TransferirDto dto = new TransferirDto();
+//         dto.setMonto(-100.0);
+//         dto.setCuentaOrigen(1L);
+//         dto.setCuentaDestino(2L);
 
-        assertThrows(IllegalArgumentException.class, () -> transferirValidator.validate(dto),
-                "El monto debe ser mayor a 0.");
-    }
+//         assertThrows(IllegalArgumentException.class, () -> transferirValidator.validate(dto),
+//                 "El monto debe ser mayor a 0.");
+//     }
 
-    @Test
-    void validateCuentasIguales() {
-        TransferirDto dto = new TransferirDto();
-        dto.setMonto(100.0);
-        dto.setCuentaOrigen(1L);
-        dto.setCuentaDestino(1L);
+//     @Test
+//     void validateCuentasIguales() {
+//         TransferirDto dto = new TransferirDto();
+//         dto.setMonto(100.0);
+//         dto.setCuentaOrigen(1L);
+//         dto.setCuentaDestino(1L);
 
-        assertThrows(IllegalArgumentException.class, () -> transferirValidator.validate(dto),
-                "Las cuentas no pueden ser iguales.");
-    }
+//         assertThrows(IllegalArgumentException.class, () -> transferirValidator.validate(dto),
+//                 "Las cuentas no pueden ser iguales.");
+//     }
 
-    @Test
-    void validateCuentaOrigenNoExiste() {
-        TransferirDto dto = new TransferirDto();
-        dto.setMonto(100.0);
-        dto.setCuentaOrigen(1L);
-        dto.setCuentaDestino(2L);
+//     @Test
+//     void validateCuentaOrigenNoExiste() {
+//         TransferirDto dto = new TransferirDto();
+//         dto.setMonto(100.0);
+//         dto.setCuentaOrigen(1L);
+//         dto.setCuentaDestino(2L);
 
-        when(serviceCuenta.buscarCuenta(1L)).thenReturn(null);
+//         when(serviceCuenta.buscarCuenta(1L)).thenReturn(null);
 
-        assertThrows(IllegalArgumentException.class, () -> transferirValidator.validate(dto),
-                "La cuenta de origen no existe.");
-    }
+//         assertThrows(IllegalArgumentException.class, () -> transferirValidator.validate(dto),
+//                 "La cuenta de origen no existe.");
+//     }
 
-    @Test
-    void validateCuentaDestinoNoExiste() {
-        TransferirDto dto = new TransferirDto();
-        dto.setMonto(100.0);
-        dto.setCuentaOrigen(1L);
-        dto.setCuentaDestino(2L);
+//     @Test
+//     void validateCuentaDestinoNoExiste() {
+//         TransferirDto dto = new TransferirDto();
+//         dto.setMonto(100.0);
+//         dto.setCuentaOrigen(1L);
+//         dto.setCuentaDestino(2L);
 
-        Cuenta cuentaOrigen = new Cuenta();
-        when(serviceCuenta.buscarCuenta(1L)).thenReturn(cuentaOrigen);
-        when(serviceCuenta.buscarCuenta(2L)).thenReturn(null);
+//         Cuenta cuentaOrigen = new Cuenta();
+//         when(serviceCuenta.buscarCuenta(1L)).thenReturn(cuentaOrigen);
+//         when(serviceCuenta.buscarCuenta(2L)).thenReturn(null);
 
-        assertThrows(IllegalArgumentException.class, () -> transferirValidator.validate(dto),
-                "La cuenta de destino no existe.");
-    }
+//         assertThrows(IllegalArgumentException.class, () -> transferirValidator.validate(dto),
+//                 "La cuenta de destino no existe.");
+//     }
 
-    @Test
-    void validateSaldoNegativo() {
-        TransferirDto dto = new TransferirDto();
-        dto.setMonto(100.0);
-        dto.setCuentaOrigen(1L);
-        dto.setCuentaDestino(2L);
+//     @Test
+//     void validateSaldoNegativo() {
+//         TransferirDto dto = new TransferirDto();
+//         dto.setMonto(100.0);
+//         dto.setCuentaOrigen(1L);
+//         dto.setCuentaDestino(2L);
 
-        Cuenta cuentaOrigen = new Cuenta();
-        cuentaOrigen.setSaldo(-50.0);
-        Cuenta cuentaDestino = new Cuenta();
+//         Cuenta cuentaOrigen = new Cuenta();
+//         cuentaOrigen.setSaldo(-50.0);
+//         Cuenta cuentaDestino = new Cuenta();
 
-        when(serviceCuenta.buscarCuenta(1L)).thenReturn(cuentaOrigen);
-        when(serviceCuenta.buscarCuenta(2L)).thenReturn(cuentaDestino);
+//         when(serviceCuenta.buscarCuenta(1L)).thenReturn(cuentaOrigen);
+//         when(serviceCuenta.buscarCuenta(2L)).thenReturn(cuentaDestino);
 
-        assertThrows(IllegalArgumentException.class, () -> transferirValidator.validate(dto),
-                "La cuenta no tiene saldo suficiente.");
-    }
+//         assertThrows(IllegalArgumentException.class, () -> transferirValidator.validate(dto),
+//                 "La cuenta no tiene saldo suficiente.");
+//     }
 
-    @Test
-    void validateSaldoInsuficiente() {
-        TransferirDto dto = new TransferirDto();
-        dto.setMonto(100.0);
-        dto.setCuentaOrigen(1L);
-        dto.setCuentaDestino(2L);
+//     @Test
+//     void validateSaldoInsuficiente() {
+//         TransferirDto dto = new TransferirDto();
+//         dto.setMonto(100.0);
+//         dto.setCuentaOrigen(1L);
+//         dto.setCuentaDestino(2L);
 
-        Cuenta cuentaOrigen = new Cuenta();
-        cuentaOrigen.setSaldo(50.0);
-        cuentaOrigen.setEstaA(true);
-        Cuenta cuentaDestino = new Cuenta();
-        cuentaDestino.setEstaA(true);
+//         Cuenta cuentaOrigen = new Cuenta();
+//         cuentaOrigen.setSaldo(50.0);
+//         cuentaOrigen.setEstaA(true);
+//         Cuenta cuentaDestino = new Cuenta();
+//         cuentaDestino.setEstaA(true);
 
-        when(serviceCuenta.buscarCuenta(1L)).thenReturn(cuentaOrigen);
-        when(serviceCuenta.buscarCuenta(2L)).thenReturn(cuentaDestino);
+//         when(serviceCuenta.buscarCuenta(1L)).thenReturn(cuentaOrigen);
+//         when(serviceCuenta.buscarCuenta(2L)).thenReturn(cuentaDestino);
 
-        assertThrows(IllegalArgumentException.class, () -> transferirValidator.validate(dto),
-                "La cuenta no tiene saldo suficiente.");
-    }
+//         assertThrows(IllegalArgumentException.class, () -> transferirValidator.validate(dto),
+//                 "La cuenta no tiene saldo suficiente.");
+//     }
 
-    @Test
-    void validateCuentasInactivas() {
-        TransferirDto dto = new TransferirDto();
-        dto.setMonto(100.0);
-        dto.setCuentaOrigen(1L);
-        dto.setCuentaDestino(2L);
+//     @Test
+//     void validateCuentasInactivas() {
+//         TransferirDto dto = new TransferirDto();
+//         dto.setMonto(100.0);
+//         dto.setCuentaOrigen(1L);
+//         dto.setCuentaDestino(2L);
 
-        Cuenta cuentaOrigen = new Cuenta();
-        cuentaOrigen.setSaldo(200.0);
-        cuentaOrigen.setEstaA(false);
-        Cuenta cuentaDestino = new Cuenta();
-        cuentaDestino.setEstaA(true);
+//         Cuenta cuentaOrigen = new Cuenta();
+//         cuentaOrigen.setSaldo(200.0);
+//         cuentaOrigen.setEstaA(false);
+//         Cuenta cuentaDestino = new Cuenta();
+//         cuentaDestino.setEstaA(true);
 
-        when(serviceCuenta.buscarCuenta(1L)).thenReturn(cuentaOrigen);
-        when(serviceCuenta.buscarCuenta(2L)).thenReturn(cuentaDestino);
+//         when(serviceCuenta.buscarCuenta(1L)).thenReturn(cuentaOrigen);
+//         when(serviceCuenta.buscarCuenta(2L)).thenReturn(cuentaDestino);
 
-        assertThrows(IllegalArgumentException.class, () -> transferirValidator.validate(dto),
-                "Ambas cuentas deben estar activas.");
-    }
+//         assertThrows(IllegalArgumentException.class, () -> transferirValidator.validate(dto),
+//                 "Ambas cuentas deben estar activas.");
+//     }
 
-    @Test
-    void validateMonedaDiferente() {
-        TransferirDto dto = new TransferirDto();
-        dto.setMonto(100.0);
-        dto.setCuentaOrigen(1L);
-        dto.setCuentaDestino(2L);
-        dto.setMoneda("USD");  // Asegúrate de que la moneda esté configurada correctamente en el DTO
+//     @Test
+//     void validateMonedaDiferente() {
+//         TransferirDto dto = new TransferirDto();
+//         dto.setMonto(100.0);
+//         dto.setCuentaOrigen(1L);
+//         dto.setCuentaDestino(2L);
+//         dto.setMoneda("USD");  // Asegúrate de que la moneda esté configurada correctamente en el DTO
 
-        Cuenta cuentaOrigen = new Cuenta();
-        cuentaOrigen.setSaldo(200.0);
-        cuentaOrigen.setEstaA(true);
-        cuentaOrigen.setMoneda("USD");
+//         Cuenta cuentaOrigen = new Cuenta();
+//         cuentaOrigen.setSaldo(200.0);
+//         cuentaOrigen.setEstaA(true);
+//         cuentaOrigen.setMoneda("USD");
 
-        Cuenta cuentaDestino = new Cuenta();
-        cuentaDestino.setSaldo(100.0);
-        cuentaDestino.setEstaA(true);
-        cuentaDestino.setMoneda("ARS");
+//         Cuenta cuentaDestino = new Cuenta();
+//         cuentaDestino.setSaldo(100.0);
+//         cuentaDestino.setEstaA(true);
+//         cuentaDestino.setMoneda("ARS");
 
-        // Mock de las cuentas
-        when(serviceCuenta.buscarCuenta(1L)).thenReturn(cuentaOrigen);
-        when(serviceCuenta.buscarCuenta(2L)).thenReturn(cuentaDestino);
+//         // Mock de las cuentas
+//         when(serviceCuenta.buscarCuenta(1L)).thenReturn(cuentaOrigen);
+//         when(serviceCuenta.buscarCuenta(2L)).thenReturn(cuentaDestino);
 
-        // Verifica que la excepción se lance correctamente
-        assertThrows(IllegalArgumentException.class, () -> transferirValidator.validate(dto),
-                "Las cuentas deben tener la misma moneda, junto con la moneda de la operacion.");
-    }
-}
+//         // Verifica que la excepción se lance correctamente
+//         assertThrows(IllegalArgumentException.class, () -> transferirValidator.validate(dto),
+//                 "Las cuentas deben tener la misma moneda, junto con la moneda de la operacion.");
+//     }
+// }

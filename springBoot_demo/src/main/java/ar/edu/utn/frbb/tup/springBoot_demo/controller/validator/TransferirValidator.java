@@ -16,18 +16,18 @@ public class TransferirValidator {
         if (serviceCuenta.buscarCuenta(transferirDto.getCuentaDestino()) == null) throw new IllegalArgumentException("La cuenta de destino no existe.");
         validateSaldo(transferirDto.getCuentaOrigen(), transferirDto.getMonto());
         validateActiva(transferirDto.getCuentaOrigen(), transferirDto.getCuentaDestino());
-        validateMoneda(serviceCuenta.buscarCuenta(transferirDto.getCuentaOrigen()).getMoneda(),
-        serviceCuenta.buscarCuenta(transferirDto.getCuentaDestino()).getMoneda(),
+        validateMoneda(serviceCuenta.buscarCuenta(transferirDto.getCuentaOrigen()).getDatos().getMoneda(),
+        serviceCuenta.buscarCuenta(transferirDto.getCuentaDestino()).getDatos().getMoneda(),
         transferirDto.getMoneda());
     }
 
     private void validateSaldo(Long cuentaOrigen, double monto){
-        if (serviceCuenta.buscarCuenta(cuentaOrigen).getSaldo() < 0) throw new IllegalArgumentException("La cuenta no tiene saldo suficiente.");
-        if (serviceCuenta.buscarCuenta(cuentaOrigen).getSaldo() < monto) throw new IllegalArgumentException("La cuenta no tiene saldo suficiente.");
+        if (serviceCuenta.buscarCuenta(cuentaOrigen).getDatos().getSaldo() < 0) throw new IllegalArgumentException("La cuenta no tiene saldo suficiente.");
+        if (serviceCuenta.buscarCuenta(cuentaOrigen).getDatos().getSaldo() < monto) throw new IllegalArgumentException("La cuenta no tiene saldo suficiente.");
     }
 
     private void validateActiva(Long cuentaOrigen, Long cuentaDestino){
-        if (!serviceCuenta.buscarCuenta(cuentaOrigen).getEstaA() || !serviceCuenta.buscarCuenta(cuentaDestino).getEstaA()) throw new IllegalArgumentException("Ambas cuentas deben estar activas.");
+        if (!serviceCuenta.buscarCuenta(cuentaOrigen).getDatos().getEstaA() || !serviceCuenta.buscarCuenta(cuentaDestino).getDatos().getEstaA()) throw new IllegalArgumentException("Ambas cuentas deben estar activas.");
     }
 
     private void validateMoneda(String cuentaOrigenM, String cuentaDestinoM, String moneda){

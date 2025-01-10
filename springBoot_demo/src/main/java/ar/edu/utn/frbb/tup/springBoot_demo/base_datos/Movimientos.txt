@@ -1,8 +1,19 @@
-1;123456789;2024-12-05;Compra en supermercado
-2;987654321;2024-12-05;Pago de servicios
-3;123456791;2024-12-13;Transferencia a: 123456790 - Monto: 5000.0$dolares
-4;123456790;2024-12-13;Transferencia de: 123456791 - Monto: 5000.0$dolares
-5;123456791;2024-12-13;Transferencia a: 123456790 - Monto: 5000.0$dolares
-6;123456790;2024-12-13;Transferencia de: 123456791 - Monto: 5000.0$dolares
-7;1;2024-12-13;Creacion de prueba
-8;1;2024-12-13;Creacion de prueba
+123456789;2024-12-05;Compra;Compra en supermercado;500.0
+123456789;2024-12-06;Retiro;Cajero automático;1000.0
+123456789;2024-12-07;Depósito;Depósito bancario;1500.0
+987654321;2024-12-08;Transferencia;Transferencia a: 123456789;2000.0
+987654321;2024-12-09;Transferencia;Transferencia de: 123456789;3000.0
+987654321;2024-12-10;Compra;Pago de servicios;450.75
+987654322;2024-12-11;Depósito;Depósito en efectivo;2500.0
+987654322;2024-12-12;Retiro;Retiro en sucursal;750.25
+987654322;2024-12-13;Transferencia;Transferencia a: 987654321;100.0
+987654323;2024-12-14;Depósito;Depósito bancario;1000.0
+987654323;2024-12-15;Retiro;Cajero automático;200.5
+987654324;2025-01-10;Deposito;Deposito en cajero;100.0
+987654324;2025-01-10;Retiro;Retiro en cajero;100.75
+987654323;2025-01-10;Transferencia;Enviada a: 987654322 - Banco: provincia;5000.0
+987654322;2025-01-10;Transferencia;Resivida de: 987654323 - Banco: provincia;5000.0
+987654323;2025-01-10;Transferencia;Enviada a: 987654322 - Banco: provincia;5000.0
+987654322;2025-01-10;Transferencia;Resivida de: 987654323 - Banco: provincia;5000.0
+987654323;2025-01-10;Transferencia;Enviada a: 987654322 - Banco: provincia;5100.0
+987654322;2025-01-10;Transferencia;Resivida de: 987654323 - Banco: provincia;5100.0

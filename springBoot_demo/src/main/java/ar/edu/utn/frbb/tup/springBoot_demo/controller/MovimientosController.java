@@ -17,7 +17,7 @@ public class MovimientosController {
     private ServiceMovimientos serviceMovimientos;
 
     // GET /cuenta/{id}/movimientos movimientos asociados a una cuenta
-    @GetMapping("/{id}/movimientos")
+    @GetMapping("/{id}/transacciones")
     public ResponseEntity<Movimientos> darMovimientos(@PathVariable Long id) {
         Movimientos movimientos = serviceMovimientos.buscar(id);
         if (movimientos.getTransacciones() == null || movimientos.getTransacciones().isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404

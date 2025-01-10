@@ -37,8 +37,8 @@ public class Cuenta {
         + this.banco;
     }
     // metodo transferencia
-    public void transferencia(Cuenta cuentaDestino, Double monto){
-        this.saldo -= monto;
+    public void transferencia(Cuenta cuentaDestino, Double monto, Double comision){
+        this.saldo -= monto + comision;
         cuentaDestino.saldo += monto;
     }
     public void depositar(Double monto){
