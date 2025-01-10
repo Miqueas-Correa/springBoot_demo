@@ -82,11 +82,11 @@
      - {
        "cuentaOrigen": 123456791,
        "cuentaDestino": 123456790,
-       "monto": 5000.0,
+       "monto": 5100.0,
        "moneda": "dolares"
        }
 
 ## - Movimientos:
-  * /cuenta/{numeroCuenta}/movimientos
+  * /cuenta/{numeroCuenta}/transacciones
   * Cuenta con: 
      - GET: (numero de cuenta) trae todos los movimmientos de esa cuenta. Disponible para purebas 987654324 
