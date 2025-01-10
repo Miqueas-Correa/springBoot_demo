@@ -6,14 +6,12 @@ import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.ClienteAlreadyExistsE
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cliente;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.MsjResponce;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Respuesta;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
-
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -69,20 +67,17 @@ public class ServiceClienteTest {
 
         serviceCliente.save(clienteDto);
 
-        // Verificar que se llamo al método save en daoCliente con cualquier objeto Cliente
         verify(daoCliente).save(any(Cliente.class));
     }
 
     @Test
     void testAltaClienteMenorEdad() {
-        // Configurar todos los campos obligatorios
         ClienteDto clienteDto = new ClienteDto();
         clienteDto.setNombre_y_apellido("Pedro Martinez");
         clienteDto.setDni(11223344L);
         clienteDto.setFechaNacimiento(java.time.LocalDate.of(2010, 1, 1));
         clienteDto.setTelefono(1234567890L);
 
-        // Verificar que se lanza la excepción esperada para un cliente menor de edad
         assertThrows(IllegalArgumentException.class, () -> serviceCliente.altaCliente(clienteDto));
     }
 
@@ -94,10 +89,8 @@ public class ServiceClienteTest {
         clienteDto.setFechaNacimiento(java.time.LocalDate.of(1990, 1, 1));
         clienteDto.setTelefono(1234567890L);
 
-        // Simular que el cliente ya existe en el sistema
         when(daoCliente.buscarClientePorDni(99887766L)).thenReturn(new Cliente(clienteDto));
 
-        // Verificar que se lanza la excepción para un cliente ya existente
         assertThrows(ClienteAlreadyExistsException.class, () -> serviceCliente.altaCliente(clienteDto));
     }
 
@@ -188,7 +181,6 @@ public class ServiceClienteTest {
         clienteDto.setNombre_y_apellido("Test User");
         clienteDto.setDni(12345678L);
         clienteDto.setTelefono(1234567890L);
-        // Cliente con 17 años y 364 días
         clienteDto.setFechaNacimiento(LocalDate.now().minusYears(18).plusDays(1));
 
         IllegalArgumentException exception = assertThrows(
