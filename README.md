@@ -42,9 +42,9 @@
 ## - Cuenta:
   * /cuenta
   * /cuenta/{numeroCuenta}
-  * /cuenta/depositar/{numeroCuenta}
+  * /cuenta/depositar/{numeroCuenta}, es PUT
      - 100.00
-  * /cuenta/retirar/{numeroCuenta}
+  * /cuenta/retirar/{numeroCuenta}, es PUT
      - 100.75
   * Cuenta con:
      - GET: (numero de cuenta "opcional")
@@ -78,7 +78,7 @@
      - DELETE: (numeroCuenta "obligatorio"), solo le da de baja la cuenta, 987654324
    
 ## - Transferir:
-  * /cuenta/transferir/{numeroCuenta}
+  * /transfer
      - {
        "cuentaOrigen": 123456791,
        "cuentaDestino": 123456790,
@@ -87,18 +87,6 @@
        }
 
 ## - Movimientos:
-  * /cuenta/movimientos
-  * /cuenta/movimientos/{numeroCuenta}
+  * /cuenta/{numeroCuenta}/movimientos
   * Cuenta con: 
-     - GET: (numero de cuenta "opcional") trae todos los movimmientos de esa cuenta.
-        {
-        "id": 1,
-        "descripcion": "Compra en supermercado",
-        "fecha_y_hs": "2024-12-05",
-        "numeroCuenta": 123456789
-        }
-     - POST:
-        {
-        "descripcion": "Creacion de prueba",
-        "numeroCuenta": 1
-        }
+     - GET: (numero de cuenta) trae todos los movimmientos de esa cuenta. Disponible para purebas 987654324 
