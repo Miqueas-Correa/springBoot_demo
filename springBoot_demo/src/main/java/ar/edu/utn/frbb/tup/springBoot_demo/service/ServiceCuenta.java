@@ -1,14 +1,16 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cuenta;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.Movimientos;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.MsjResponce;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Respuesta;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.Transaccion;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.CuentaDto;
-import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.exception.CuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.springBoot_demo.persistence.DaoCuenta;
 import ar.edu.utn.frbb.tup.springBoot_demo.persistence.DaoMovimientos;
@@ -62,12 +64,12 @@ public class ServiceCuenta {
 
         daoCuenta.update(cuentaDto, cuenta.getNumeroCuenta());
         // crear el movimiento
-        MovimientosDto movimientoDto1 = new MovimientosDto();
+        List<Transaccion> transacciones = new ArrayList<>();
+        Transaccion transaccion = new Transaccion("Deposito", "Deposito en cajero", monto);
+        transacciones.add(transaccion);
+        Movimientos movimiento = new Movimientos(cuenta.getNumeroCuenta(), transacciones);
 
-        movimientoDto1.setNumeroCuenta(cuenta.getNumeroCuenta());
-        movimientoDto1.setDescripcion("Deposito : - Monto: " + monto + "$ " + cuenta.getMoneda());
-
-        daoMovimientos.save(movimientoDto1);
+        daoMovimientos.save(movimiento);
 
         return new Respuesta<>(new MsjResponce("EXITOSA", "Se deposito el monto."), cuenta, HttpStatus.CREATED);
     }
@@ -91,12 +93,12 @@ public class ServiceCuenta {
         cuentaDto.setSaldo(cuenta.getSaldo());
         daoCuenta.update(cuentaDto, cuenta.getNumeroCuenta());
         // crear el movimiento
-        MovimientosDto movimientoDto1 = new MovimientosDto();
+        List<Transaccion> transacciones = new ArrayList<>();
+        Transaccion transaccion = new Transaccion("Retiro", "Retiro en cajero", monto);
+        transacciones.add(transaccion);
+        Movimientos movimiento = new Movimientos(cuenta.getNumeroCuenta(), transacciones);
 
-        movimientoDto1.setNumeroCuenta(cuenta.getNumeroCuenta());
-        movimientoDto1.setDescripcion("Retiro : - Monto: " + monto + "$ " + cuenta.getMoneda());
-
-        daoMovimientos.save(movimientoDto1);
+        daoMovimientos.save(movimiento);
 
         return new Respuesta<>(new MsjResponce("EXITOSA", "Se retiro el monto."), cuenta, HttpStatus.OK);
     }

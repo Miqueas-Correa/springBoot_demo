@@ -1,51 +1,41 @@
 package ar.edu.utn.frbb.tup.springBoot_demo.model;
 
-import java.time.LocalDate;
-import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.MovimientosDto;
+import java.util.List;
 
 public class Movimientos {
-    private Long id;
-    private String descripcion;
-    private LocalDate fecha_y_hs;
     private Long numeroCuenta;
+    private List<Transaccion> transacciones;
 
-    // constructor
-    public Movimientos(){}
-    public Movimientos(MovimientosDto movimientosDto){
-        this.descripcion = movimientosDto.getDescripcion();
-        this.numeroCuenta = movimientosDto.getNumeroCuenta();
-        this.fecha_y_hs = LocalDate.now();
+    public Movimientos() {}
+    public Movimientos(Long numeroCuenta, List<Transaccion> transacciones) {
+        this.numeroCuenta = numeroCuenta;
+        this.transacciones = transacciones;
     }
 
-    // getters and setters
-    public Long getId() {
-        return this.id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getDescripcion() {
-        return this.descripcion;
-    }
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-    public LocalDate getFecha_y_hs() {
-        return this.fecha_y_hs;
-    }
-    public void setFecha_y_hs(LocalDate fecha) {
-        this.fecha_y_hs = fecha;
-    }
+    // Getters y Setters
     public Long getNumeroCuenta() {
         return numeroCuenta;
     }
+
     public void setNumeroCuenta(Long numeroCuenta) {
         this.numeroCuenta = numeroCuenta;
     }
 
-    // retornar movimiento
+    public List<Transaccion> getTransacciones() {
+        return transacciones;
+    }
+
+    public void setTransacciones(List<Transaccion> transacciones) {
+        this.transacciones = transacciones;
+    }
+
     @Override
     public String toString() {
-        return this.id + ";" + this.numeroCuenta + ";" + this.fecha_y_hs + ";" + this.descripcion;
+        StringBuilder sb = new StringBuilder();
+        sb.append(numeroCuenta).append(";");
+        for (Transaccion t : transacciones) {
+            sb.append(t.toString()).append("\n");
+        }
+        return sb.toString().trim();
     }
 }
