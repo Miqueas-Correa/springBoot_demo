@@ -1,75 +1,65 @@
-// package ar.edu.utn.frbb.tup.springBoot_demo.service;
+package ar.edu.utn.frbb.tup.springBoot_demo.service;
 
-// import static org.mockito.Mockito.*;
-// import static org.junit.jupiter.api.Assertions.*;
-// import ar.edu.utn.frbb.tup.springBoot_demo.persistence.DaoMovimientos;
-// import ar.edu.utn.frbb.tup.springBoot_demo.model.Movimientos;
-// import org.junit.jupiter.api.BeforeEach;
-// import org.junit.jupiter.api.Test;
-// import org.junit.jupiter.api.extension.ExtendWith;
-// import org.mockito.Mock;
-// import org.mockito.junit.jupiter.MockitoExtension;
-// import java.util.ArrayList;
-// import java.util.List;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.Movimientos;
+import ar.edu.utn.frbb.tup.springBoot_demo.persistence.DaoMovimientos;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-// @ExtendWith(MockitoExtension.class)
-// public class ServiceMovimientosTest {
+@ExtendWith(MockitoExtension.class)
+class ServiceMovimientosTest {
 
-//     @Mock
-//     private DaoMovimientos daoMovimientos;
+    @Mock
+    private DaoMovimientos daoMovimientos;
 
-//     private ServiceMovimientos serviceMovimientos;
+    @InjectMocks
+    private ServiceMovimientos serviceMovimientos;
 
-//     @BeforeEach
-//     void setUp() {
-//         serviceMovimientos = new ServiceMovimientos(daoMovimientos);
-//     }
+    @Test
+    void save_ValidMovimiento_ShouldSaveSuccessfully() {
+        Movimientos movimiento = new Movimientos();
+        movimiento.setNumeroCuenta(1234L);
 
-//     @Test
-//     void save_ValidMovimiento_ShouldCallDaoSave() {
-//         MovimientosDto movimientoDto = new MovimientosDto();
-//         serviceMovimientos.save(movimientoDto);
-//         verify(daoMovimientos).save(movimientoDto);
-//     }
+        serviceMovimientos.save(movimiento);
 
-//     @Test
-//     void save_NullMovimiento_ShouldThrowException() {
-//         assertThrows(IllegalArgumentException.class, () -> {
-//             serviceMovimientos.save(null);
-//         });
-//     }
+        verify(daoMovimientos, times(1)).save(movimiento);
+    }
 
-//     @Test
-//     void darMovimientos_ShouldReturnListFromDao() {
-//         List<Movimientos> expectedMovimientos = new ArrayList<>();
-//         expectedMovimientos.add(new Movimientos());
-//         when(daoMovimientos.darMovimientos()).thenReturn(expectedMovimientos);
+    @Test
+    void save_NullMovimiento_ShouldThrowException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            serviceMovimientos.save(null);
+        });
+    }
 
-//         List<Movimientos> result = serviceMovimientos.darMovimientos();
-        
-//         assertEquals(expectedMovimientos, result);
-//         verify(daoMovimientos).darMovimientos();
-//     }
+    @Test
+    void buscar_ExistingCuenta_ShouldReturnMovimiento() {
+        Long numeroCuenta = 5678L;
+        Movimientos expectedMovimiento = new Movimientos();
+        expectedMovimiento.setNumeroCuenta(numeroCuenta);
 
-//     @Test
-//     void buscar_ValidNumeroCuenta_ShouldReturnFilteredList() {
-//         Long numeroCuenta = 123456L;
-//         List<Movimientos> expectedMovimientos = new ArrayList<>();
-//         when(daoMovimientos.buscar(numeroCuenta)).thenReturn(expectedMovimientos);
+        when(daoMovimientos.buscar(numeroCuenta)).thenReturn(expectedMovimiento);
 
-//         List<Movimientos> result = serviceMovimientos.buscar(numeroCuenta);
+        Movimientos result = serviceMovimientos.buscar(numeroCuenta);
 
-//         assertEquals(expectedMovimientos, result);
-//         verify(daoMovimientos).buscar(numeroCuenta);
-//     }
+        assertNotNull(result);
+        assertEquals(numeroCuenta, result.getNumeroCuenta()); // Verificar que el número de cuenta coincide
+        verify(daoMovimientos, times(1)).buscar(numeroCuenta); // Verificar que el dao fue llamado correctamente
+    }
 
-//     @Test
-//     void darMovimientos_EmptyList_ShouldReturnEmptyList() {
-//         when(daoMovimientos.darMovimientos()).thenReturn(new ArrayList<>());
-        
-//         List<Movimientos> result = serviceMovimientos.darMovimientos();
-        
-//         assertTrue(result.isEmpty());
-//         verify(daoMovimientos).darMovimientos();
-//     }
-// }
+    @Test
+    void buscar_NonExistingCuenta_ShouldReturnNull() {
+        Long numeroCuenta = 9999L;
+
+        when(daoMovimientos.buscar(numeroCuenta)).thenReturn(null);
+
+        Movimientos result = serviceMovimientos.buscar(numeroCuenta);
+
+        assertNull(result);
+        verify(daoMovimientos, times(1)).buscar(numeroCuenta); // Verificar que el dao fue llamado correctamente
+    }
+}
