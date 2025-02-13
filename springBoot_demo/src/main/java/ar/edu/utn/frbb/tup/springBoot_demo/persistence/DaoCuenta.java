@@ -88,6 +88,7 @@ public class DaoCuenta extends AbstractBaseDao {
                     cuenta.setSaldo(cuentaDto.getSaldo());
                     cuenta.setTipoCuenta(cuentaDto.getTipoCuenta());
                     cuenta.setMoneda(cuentaDto.getMoneda());
+                    cuenta.setBanco(cuentaDto.getBanco());
 
                     // Crear la nueva línea con los datos actualizados
                     String updatedCuentaData = cuenta.toString();

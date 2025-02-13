@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Cuenta;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Movimientos;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.MsjResponce;
+import ar.edu.utn.frbb.tup.springBoot_demo.model.Respuesta;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.Transaccion;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.springBoot_demo.model.dto.TransferirDto;
@@ -22,8 +23,16 @@ public class TransferService {
     // metodo para transferencia
     public MsjResponce transferir(TransferirDto transferirDto){
         try {
-            Cuenta cuentaOrigen = serviceCuenta.buscarCuenta(transferirDto.getCuentaOrigen()).getDatos();
-            Cuenta cuentaDestino = serviceCuenta.buscarCuenta(transferirDto.getCuentaDestino()).getDatos();
+            Respuesta<Cuenta> respuestaOrigen = serviceCuenta.buscarCuenta(transferirDto.getCuentaOrigen());
+            Respuesta<Cuenta> respuestaDestino = serviceCuenta.buscarCuenta(transferirDto.getCuentaDestino());
+
+            if (respuestaOrigen == null || respuestaOrigen.getDatos() == null ||
+                respuestaDestino == null || respuestaDestino.getDatos() == null) {
+                return new MsjResponce("FALLIDA", "Una o ambas cuentas no existen.");
+            }
+
+            Cuenta cuentaOrigen = respuestaOrigen.getDatos();
+            Cuenta cuentaDestino = respuestaDestino.getDatos();
 
             // Sedebe verificar que la moneda de ambas cuentas sea la misma, y en caso de ser
             // transferencia en pesos, el banco cobrará un cargo del 2% de la transferencia si

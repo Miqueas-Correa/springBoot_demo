@@ -49,11 +49,13 @@ public class TransferirValidator {
     }
 
     private void validateMoneda(String cuentaOrigenM, String cuentaDestinoM, String moneda) {
-        if (!cuentaOrigenM.equals(cuentaDestinoM)) {
+        if (!cuentaOrigenM.equalsIgnoreCase(cuentaDestinoM))
             throw new IllegalArgumentException("Las cuentas deben tener la misma moneda.");
-        }
-        if (!moneda.equals("dolares") && !moneda.equals("pesos")) {
+        if (!moneda.equalsIgnoreCase("dolares") && !moneda.equalsIgnoreCase("pesos"))
             throw new IllegalArgumentException("La moneda de la operación no es válida.");
-        }
+        if (!moneda.equalsIgnoreCase(cuentaOrigenM))
+            throw new IllegalArgumentException("La moneda de la transferencia debe coincidir con la de la cuenta.");
+        if  (!cuentaOrigenM.equalsIgnoreCase(moneda))
+            throw new IllegalArgumentException("La moneda de la transferencia debe ser la misma que la de la cuenta.");
     }
 }

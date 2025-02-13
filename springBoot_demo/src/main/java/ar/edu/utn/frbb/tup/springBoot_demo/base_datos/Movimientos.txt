@@ -17,3 +17,21 @@
 987654322;2025-01-10;Transferencia;Resivida de: 987654323 - Banco: provincia;5000.0
 987654323;2025-01-10;Transferencia;Enviada a: 987654322 - Banco: provincia;5100.0
 987654322;2025-01-10;Transferencia;Resivida de: 987654323 - Banco: provincia;5100.0
+987654324;2025-02-13;Deposito;Deposito en cajero;100.0
+987654324;2025-02-13;Retiro;Retiro en cajero;100.75
+987654323;2025-02-13;Transferencia;Enviada a: 987654322 - Banco: provincia;5100.0
+987654322;2025-02-13;Transferencia;Resivida de: 987654323 - Banco: provincia;5100.0
+987654323;2025-02-13;Transferencia;Enviada a: 987654322 - Banco: null;5100.0
+987654322;2025-02-13;Transferencia;Resivida de: 987654323 - Banco: null;5100.0
+987654323;2025-02-13;Transferencia;Enviada a: 987654322 - Banco: null;5100.0
+987654322;2025-02-13;Transferencia;Resivida de: 987654323 - Banco: null;5100.0
+987654323;2025-02-13;Transferencia;Enviada a: 987654322 - Banco: null;5100.0
+987654322;2025-02-13;Transferencia;Resivida de: 987654323 - Banco: null;5100.0
+987654323;2025-02-13;Transferencia;Enviada a: 987654322 - Banco: null;5100.0
+987654322;2025-02-13;Transferencia;Resivida de: 987654323 - Banco: null;5100.0
+987654323;2025-02-13;Transferencia;Enviada a: 987654322 - Banco: nacion;5100.0
+987654322;2025-02-13;Transferencia;Resivida de: 987654323 - Banco: nacion;5100.0
+987654323;2025-02-13;Transferencia;Enviada a: 987654322 - Banco: null;5100.0
+987654322;2025-02-13;Transferencia;Resivida de: 987654323 - Banco: null;5100.0
+987654323;2025-02-13;Transferencia;Enviada a: 987654322 - Banco: null;5100.0
+987654322;2025-02-13;Transferencia;Resivida de: 987654323 - Banco: null;5100.0
