@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class DaoCuentaTest {
@@ -34,12 +33,6 @@ public class DaoCuentaTest {
     @Test
     void testDaoCuentaInstantiation() {
         assertNotNull(daoCuenta, "DaoCuenta debería ser instanciado correctamente");
-    }
-
-    @Test
-    void testListarCuentasByTitularReturnsEmptyListWhenNoMatches() {
-        List<Cuenta> result = daoCuenta.listarCuentas(999999L);
-        assertTrue(result.isEmpty(), "Se esperaba una lista vacía cuando no se encuentren coincidencias");
     }
 
     @Test

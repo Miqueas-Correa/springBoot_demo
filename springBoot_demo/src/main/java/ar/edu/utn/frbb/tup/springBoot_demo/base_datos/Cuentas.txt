@@ -7,3 +7,9 @@
 987654324;12247172;true;500500.0;c;pesos;2025-01-10;nacion
 987654325;12247172;false;500500.75;c;dolares;2025-02-13;provincia
 987654326;12247172;false;500500.75;c;dolares;2025-02-13;provincia
+987654327;123;null;null;null;pesos;2023-01-01;null
+987654328;456;null;null;null;pesos;2023-01-01;null
+987654329;123;null;null;null;pesos;2023-01-01;null
+987654330;456;null;null;null;pesos;2023-01-01;null
+987654331;123;null;null;null;pesos;2023-01-01;null
+987654332;456;null;null;null;pesos;2023-01-01;null

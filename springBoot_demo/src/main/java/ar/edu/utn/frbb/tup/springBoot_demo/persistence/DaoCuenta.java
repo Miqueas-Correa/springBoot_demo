@@ -53,24 +53,24 @@ public class DaoCuenta extends AbstractBaseDao {
         return null;
     }
 
-    // listar las cuentas del cliente
-    public List<Cuenta> listarCuentas(long titular) {
-        List<Cuenta> cuentasFiltradas = new ArrayList<>();
-        try {
-            // Leer todas las líneas del archivo
-            List<String> lineas = Files.readAllLines(Paths.get(FILE_PATH_CUENTAS));
-            // Filtrar las líneas que corresponden a las cuentas del cliente
-            for (String linea : lineas) {
-                Cuenta cuenta = parseCuenta(linea);
-                if (cuenta.getTitular().equals(titular)) {
-                    cuentasFiltradas.add(cuenta);
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("No se pudo leer el archivo de cuentas");
-        }
-        return cuentasFiltradas == null ? Collections.emptyList() : cuentasFiltradas;
-    }
+    // // listar las cuentas del cliente
+    // public List<Cuenta> listarCuentas(long titular) {
+    //     List<Cuenta> cuentasFiltradas = new ArrayList<>();
+    //     try {
+    //         // Leer todas las líneas del archivo
+    //         List<String> lineas = Files.readAllLines(Paths.get(FILE_PATH_CUENTAS));
+    //         // Filtrar las líneas que corresponden a las cuentas del cliente
+    //         for (String linea : lineas) {
+    //             Cuenta cuenta = parseCuenta(linea);
+    //             if (cuenta.getTitular().equals(titular)) {
+    //                 cuentasFiltradas.add(cuenta);
+    //             }
+    //         }
+    //     } catch (IOException e) {
+    //         System.out.println("No se pudo leer el archivo de cuentas");
+    //     }
+    //     return cuentasFiltradas == null ? Collections.emptyList() : cuentasFiltradas;
+    // }
 
     // actualizo la cuenta
     public Cuenta update(CuentaDto cuentaDto, long numeroCuenta) {
